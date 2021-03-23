@@ -199,8 +199,8 @@ Recursive Panel Forecast with XGBoost
 <div id="why-is-recursive-needed-for-autoregressive-models" class="section level1">
 <h1 class="hasAnchor">
 <a href="#why-is-recursive-needed-for-autoregressive-models" class="anchor"></a>Why is Recursive needed for Autoregressive Models?</h1>
-<p>It’s important to understand that a recursive model is only needed when using lagged features with a <strong>Lag Size &lt; Forecast Horizon.</strong> When the forecast horizon is less than the lag length, a problem exists were missing values are generated in the future data.</p>
-<p>This solution that <code><a href="../reference/recursive.html">recursive()</a></code> implements is to iteratively fill these missing values in with values generated from predictions. This technique can be used for:</p>
+<p>It’s important to understand that a recursive model is only needed when using lagged features with a <strong>Lag Size &lt; Forecast Horizon.</strong> When the lag length is less than the forecast horizon, a problem exists were missing values (<code>NA</code>) are generated in the future data.</p>
+<p>A solution that <code><a href="../reference/recursive.html">recursive()</a></code> implements is to iteratively fill these missing values in with values generated from predictions. This technique can be used for:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Single time series predictions</strong> - Effectively turning any <code>tidymodels</code> model into an Autoregressive (AR) model</p></li>
 <li><p><strong>Panel time series predictions</strong> - In many situations we need to forecast more than one time series. We can batch-process these with 1 model by processing time series groups as panels. This technique can be extended to recursive forecasting for scalable models (1 model that predicts many time series).</p></li>
@@ -430,7 +430,7 @@ Recursive Panel Forecast with XGBoost
 <span class="co">#&gt; </span>
 <span class="co">#&gt; parsnip model object</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Fit time:  4ms </span>
+<span class="co">#&gt; Fit time:  6ms </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt; stats::lm(formula = value ~ ., data = data)</span>
