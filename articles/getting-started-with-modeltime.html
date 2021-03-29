@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modeltime</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -393,14 +393,14 @@ The Modeltime Workflow
 <span class="va">calibration_tbl</span>
 <span class="co">#&gt; # Modeltime Table</span>
 <span class="co">#&gt; # A tibble: 6 x 5</span>
-<span class="co">#&gt;   .model_id .model     .model_desc                        .type .calibration_da…</span>
-<span class="co">#&gt;       &lt;int&gt; &lt;list&gt;     &lt;chr&gt;                              &lt;chr&gt; &lt;list&gt;          </span>
-<span class="co">#&gt; 1         1 &lt;fit[+]&gt;   ARIMA(0,1,1)(0,1,1)[12]            Test  &lt;tibble [31 × 4…</span>
-<span class="co">#&gt; 2         2 &lt;fit[+]&gt;   ARIMA(0,1,1)(0,1,1)[12] W/ XGBOOS… Test  &lt;tibble [31 × 4…</span>
-<span class="co">#&gt; 3         3 &lt;fit[+]&gt;   ETS(M,A,A)                         Test  &lt;tibble [31 × 4…</span>
-<span class="co">#&gt; 4         4 &lt;fit[+]&gt;   PROPHET                            Test  &lt;tibble [31 × 4…</span>
-<span class="co">#&gt; 5         5 &lt;fit[+]&gt;   LM                                 Test  &lt;tibble [31 × 4…</span>
-<span class="co">#&gt; 6         6 &lt;workflow&gt; EARTH                              Test  &lt;tibble [31 × 4…</span></code></pre></div>
+<span class="co">#&gt;   .model_id .model    .model_desc                      .type .calibration_data  </span>
+<span class="co">#&gt;       &lt;int&gt; &lt;list&gt;    &lt;chr&gt;                            &lt;chr&gt; &lt;list&gt;             </span>
+<span class="co">#&gt; 1         1 &lt;fit[+]&gt;  ARIMA(0,1,1)(0,1,1)[12]          Test  &lt;tibble[,4] [31 × …</span>
+<span class="co">#&gt; 2         2 &lt;fit[+]&gt;  ARIMA(0,1,1)(0,1,1)[12] W/ XGBO… Test  &lt;tibble[,4] [31 × …</span>
+<span class="co">#&gt; 3         3 &lt;fit[+]&gt;  ETS(M,A,A)                       Test  &lt;tibble[,4] [31 × …</span>
+<span class="co">#&gt; 4         4 &lt;fit[+]&gt;  PROPHET                          Test  &lt;tibble[,4] [31 × …</span>
+<span class="co">#&gt; 5         5 &lt;fit[+]&gt;  LM                               Test  &lt;tibble[,4] [31 × …</span>
+<span class="co">#&gt; 6         6 &lt;workflo… EARTH                            Test  &lt;tibble[,4] [31 × …</span></code></pre></div>
 </div>
 <div id="step-5---testing-set-forecast-accuracy-evaluation" class="section level3">
 <h3 class="hasAnchor">
@@ -475,7 +475,7 @@ The Modeltime Workflow
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#nbcslipeaw .gt_table {
+#usqmfvlply .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -500,7 +500,7 @@ The Modeltime Workflow
   border-left-color: #D3D3D3;
 }
 
-#nbcslipeaw .gt_heading {
+#usqmfvlply .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -512,7 +512,7 @@ The Modeltime Workflow
   border-right-color: #D3D3D3;
 }
 
-#nbcslipeaw .gt_title {
+#usqmfvlply .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -522,7 +522,7 @@ The Modeltime Workflow
   border-bottom-width: 0;
 }
 
-#nbcslipeaw .gt_subtitle {
+#usqmfvlply .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -532,13 +532,13 @@ The Modeltime Workflow
   border-top-width: 0;
 }
 
-#nbcslipeaw .gt_bottom_border {
+#usqmfvlply .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#nbcslipeaw .gt_col_headings {
+#usqmfvlply .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -553,7 +553,7 @@ The Modeltime Workflow
   border-right-color: #D3D3D3;
 }
 
-#nbcslipeaw .gt_col_heading {
+#usqmfvlply .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -573,7 +573,7 @@ The Modeltime Workflow
   overflow-x: hidden;
 }
 
-#nbcslipeaw .gt_column_spanner_outer {
+#usqmfvlply .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -585,15 +585,15 @@ The Modeltime Workflow
   padding-right: 4px;
 }
 
-#nbcslipeaw .gt_column_spanner_outer:first-child {
+#usqmfvlply .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#nbcslipeaw .gt_column_spanner_outer:last-child {
+#usqmfvlply .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#nbcslipeaw .gt_column_spanner {
+#usqmfvlply .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -605,7 +605,7 @@ The Modeltime Workflow
   width: 100%;
 }
 
-#nbcslipeaw .gt_group_heading {
+#usqmfvlply .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -627,7 +627,7 @@ The Modeltime Workflow
   vertical-align: middle;
 }
 
-#nbcslipeaw .gt_empty_group_heading {
+#usqmfvlply .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -642,15 +642,15 @@ The Modeltime Workflow
   vertical-align: middle;
 }
 
-#nbcslipeaw .gt_from_md > :first-child {
+#usqmfvlply .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#nbcslipeaw .gt_from_md > :last-child {
+#usqmfvlply .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#nbcslipeaw .gt_row {
+#usqmfvlply .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -669,7 +669,7 @@ The Modeltime Workflow
   overflow-x: hidden;
 }
 
-#nbcslipeaw .gt_stub {
+#usqmfvlply .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -681,7 +681,7 @@ The Modeltime Workflow
   padding-left: 12px;
 }
 
-#nbcslipeaw .gt_summary_row {
+#usqmfvlply .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -691,7 +691,7 @@ The Modeltime Workflow
   padding-right: 5px;
 }
 
-#nbcslipeaw .gt_first_summary_row {
+#usqmfvlply .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -701,7 +701,7 @@ The Modeltime Workflow
   border-top-color: #D3D3D3;
 }
 
-#nbcslipeaw .gt_grand_summary_row {
+#usqmfvlply .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -711,7 +711,7 @@ The Modeltime Workflow
   padding-right: 5px;
 }
 
-#nbcslipeaw .gt_first_grand_summary_row {
+#usqmfvlply .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -721,11 +721,11 @@ The Modeltime Workflow
   border-top-color: #D3D3D3;
 }
 
-#nbcslipeaw .gt_striped {
+#usqmfvlply .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#nbcslipeaw .gt_table_body {
+#usqmfvlply .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -734,7 +734,7 @@ The Modeltime Workflow
   border-bottom-color: #D3D3D3;
 }
 
-#nbcslipeaw .gt_footnotes {
+#usqmfvlply .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -748,13 +748,13 @@ The Modeltime Workflow
   border-right-color: #D3D3D3;
 }
 
-#nbcslipeaw .gt_footnote {
+#usqmfvlply .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#nbcslipeaw .gt_sourcenotes {
+#usqmfvlply .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -768,46 +768,46 @@ The Modeltime Workflow
   border-right-color: #D3D3D3;
 }
 
-#nbcslipeaw .gt_sourcenote {
+#usqmfvlply .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#nbcslipeaw .gt_left {
+#usqmfvlply .gt_left {
   text-align: left;
 }
 
-#nbcslipeaw .gt_center {
+#usqmfvlply .gt_center {
   text-align: center;
 }
 
-#nbcslipeaw .gt_right {
+#usqmfvlply .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#nbcslipeaw .gt_font_normal {
+#usqmfvlply .gt_font_normal {
   font-weight: normal;
 }
 
-#nbcslipeaw .gt_font_bold {
+#usqmfvlply .gt_font_bold {
   font-weight: bold;
 }
 
-#nbcslipeaw .gt_font_italic {
+#usqmfvlply .gt_font_italic {
   font-style: italic;
 }
 
-#nbcslipeaw .gt_super {
+#usqmfvlply .gt_super {
   font-size: 65%;
 }
 
-#nbcslipeaw .gt_footnote_marks {
+#usqmfvlply .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="nbcslipeaw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="usqmfvlply" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="9" class="gt_heading gt_title gt_font_normal" style>Accuracy Table</th>
