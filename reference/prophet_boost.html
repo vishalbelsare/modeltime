@@ -452,10 +452,12 @@ names in each engine:</p>
 
 <p>Other options can be set using <code><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine()</a></code>.</p>
 <p><strong>prophet_xgboost</strong></p>
-<p>Model 1: PROPHET (<code><a href='https://rdrr.io/pkg/prophet/man/prophet.html'>prophet::prophet</a></code>):</p><pre><span class='co'>## function (df = NULL, growth = "linear", changepoints = NULL, n.changepoints = 25, changepoint.range = 0.8, </span>
-<span class='co'>##     yearly.seasonality = "auto", weekly.seasonality = "auto", daily.seasonality = "auto", holidays = NULL, </span>
-<span class='co'>##     seasonality.mode = "additive", seasonality.prior.scale = 10, holidays.prior.scale = 10, changepoint.prior.scale = 0.05, </span>
-<span class='co'>##     mcmc.samples = 0, interval.width = 0.8, uncertainty.samples = 1000, fit = TRUE, ...)</span>
+<p>Model 1: PROPHET (<code><a href='https://rdrr.io/pkg/prophet/man/prophet.html'>prophet::prophet</a></code>):</p><pre><span class='co'>## function (df = NULL, growth = "linear", changepoints = NULL, n.changepoints = 25, </span>
+<span class='co'>##     changepoint.range = 0.8, yearly.seasonality = "auto", weekly.seasonality = "auto", </span>
+<span class='co'>##     daily.seasonality = "auto", holidays = NULL, seasonality.mode = "additive", </span>
+<span class='co'>##     seasonality.prior.scale = 10, holidays.prior.scale = 10, changepoint.prior.scale = 0.05, </span>
+<span class='co'>##     mcmc.samples = 0, interval.width = 0.8, uncertainty.samples = 1000, </span>
+<span class='co'>##     fit = TRUE, ...)</span>
 </pre>
 
 <p>Parameter Notes:</p><ul>
@@ -479,8 +481,9 @@ specify non-standard seasonalities using fourier series. An alternative is to us
 <code><a href='https://rdrr.io/pkg/timetk/man/step_fourier.html'>step_fourier()</a></code> and supply custom seasonalities as Extra Regressors.</p></li>
 </ul>
 
-<p>Model 2: XGBoost (<code><a href='https://rdrr.io/pkg/xgboost/man/xgb.train.html'>xgboost::xgb.train</a></code>):</p><pre><span class='co'>## function (params = list(), data, nrounds, watchlist = list(), obj = NULL, feval = NULL, verbose = 1, print_every_n = 1L, </span>
-<span class='co'>##     early_stopping_rounds = NULL, maximize = NULL, save_period = NULL, save_name = "xgboost.model", xgb_model = NULL, </span>
+<p>Model 2: XGBoost (<code><a href='https://rdrr.io/pkg/xgboost/man/xgb.train.html'>xgboost::xgb.train</a></code>):</p><pre><span class='co'>## function (params = list(), data, nrounds, watchlist = list(), obj = NULL, </span>
+<span class='co'>##     feval = NULL, verbose = 1, print_every_n = 1L, early_stopping_rounds = NULL, </span>
+<span class='co'>##     maximize = NULL, save_period = NULL, save_name = "xgboost.model", xgb_model = NULL, </span>
 <span class='co'>##     callbacks = list(), ...)</span>
 </pre>
 

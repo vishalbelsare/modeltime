@@ -373,10 +373,12 @@ names in each engine:</p><table class='table'>
 <p>Other options can be set using <code><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine()</a></code>.</p>
 <p><strong>prophet</strong></p>
 <p>The engine uses <code><a href='https://rdrr.io/pkg/prophet/man/prophet.html'>prophet::prophet()</a></code>.</p>
-<p>Function Parameters:</p><pre><span class='co'>## function (df = NULL, growth = "linear", changepoints = NULL, n.changepoints = 25, changepoint.range = 0.8, </span>
-<span class='co'>##     yearly.seasonality = "auto", weekly.seasonality = "auto", daily.seasonality = "auto", holidays = NULL, </span>
-<span class='co'>##     seasonality.mode = "additive", seasonality.prior.scale = 10, holidays.prior.scale = 10, changepoint.prior.scale = 0.05, </span>
-<span class='co'>##     mcmc.samples = 0, interval.width = 0.8, uncertainty.samples = 1000, fit = TRUE, ...)</span>
+<p>Function Parameters:</p><pre><span class='co'>## function (df = NULL, growth = "linear", changepoints = NULL, n.changepoints = 25, </span>
+<span class='co'>##     changepoint.range = 0.8, yearly.seasonality = "auto", weekly.seasonality = "auto", </span>
+<span class='co'>##     daily.seasonality = "auto", holidays = NULL, seasonality.mode = "additive", </span>
+<span class='co'>##     seasonality.prior.scale = 10, holidays.prior.scale = 10, changepoint.prior.scale = 0.05, </span>
+<span class='co'>##     mcmc.samples = 0, interval.width = 0.8, uncertainty.samples = 1000, </span>
+<span class='co'>##     fit = TRUE, ...)</span>
 </pre>
 
 <p>Parameter Notes:</p><ul>
@@ -490,7 +492,7 @@ and the <code>date</code> feature. Only <code>month.lbl</code> will be used as a
 </div><div class='output co'>#&gt; <span class='message'>Disabling weekly seasonality. Run prophet with weekly.seasonality=TRUE to override this.</span></div><div class='output co'>#&gt; <span class='message'>Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.</span></div><div class='input'><span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  476ms 
+#&gt; Fit time:  496ms 
 #&gt; PROPHET Model
 #&gt; - growth: 'linear'
 #&gt; - n.changepoints: 25

@@ -298,9 +298,10 @@ names in each engine:</p><table class='table'>
 
 <p>Other options can be set using <code><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine()</a></code>.</p>
 <p>The engines use <code><a href='https://pkg.robjhyndman.com/forecast/reference/forecast.stl.html'>forecast::stlm()</a></code>.</p>
-<p>Function Parameters:</p><pre><span class='co'>## function (y, s.window = 13, robust = FALSE, method = c("ets", "arima"), modelfunction = NULL, model = NULL, </span>
-<span class='co'>##     etsmodel = "ZZN", lambda = NULL, biasadj = FALSE, xreg = NULL, allow.multiplicative.trend = FALSE, </span>
-<span class='co'>##     x = y, ...)</span>
+<p>Function Parameters:</p><pre><span class='co'>## function (y, s.window = 13, robust = FALSE, method = c("ets", "arima"), </span>
+<span class='co'>##     modelfunction = NULL, model = NULL, etsmodel = "ZZN", lambda = NULL, </span>
+<span class='co'>##     biasadj = FALSE, xreg = NULL, allow.multiplicative.trend = FALSE, x = y, </span>
+<span class='co'>##     ...)</span>
 </pre>
 
 <p><strong>tbats</strong></p><ul>
@@ -412,7 +413,7 @@ and the <code>date</code> feature. Only <code>month.lbl</code> will be used as a
 </div><div class='output co'>#&gt; <span class='message'>frequency = 48 observations per 1 day</span></div><div class='input'><span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  519ms 
+#&gt; Fit time:  537ms 
 #&gt; SEASONAL DECOMP: ETS(A,Ad,N)
 #&gt; 
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 5</span><span>
@@ -432,7 +433,7 @@ and the <code>date</code> feature. Only <code>month.lbl</code> will be used as a
 </div><div class='output co'>#&gt; <span class='message'>frequency = 48 observations per 1 day</span></div><div class='input'><span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  866ms 
+#&gt; Fit time:  895ms 
 #&gt; SEASONAL DECOMP: ARIMA(3,1,2)
 #&gt; 
 #&gt; Series: x 

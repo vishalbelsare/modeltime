@@ -322,8 +322,8 @@ names in each engine:</p><table class='table'>
 <p>Other options can be set using <code><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine()</a></code>.</p>
 <p><strong>nnetar</strong></p>
 <p>The engine uses <code><a href='https://pkg.robjhyndman.com/forecast/reference/nnetar.html'>forecast::nnetar()</a></code>.</p>
-<p>Function Parameters:</p><pre><span class='co'>## function (y, p, P = 1, size, repeats = 20, xreg = NULL, lambda = NULL, model = NULL, subset = NULL, scale.inputs = TRUE, </span>
-<span class='co'>##     x = y, ...)</span>
+<p>Function Parameters:</p><pre><span class='co'>## function (y, p, P = 1, size, repeats = 20, xreg = NULL, lambda = NULL, </span>
+<span class='co'>##     model = NULL, subset = NULL, scale.inputs = TRUE, x = y, ...)</span>
 </pre>
 
 <p>Parameter Notes:</p><ul>
@@ -426,7 +426,7 @@ and the <code>date</code> feature. Only <code>month.lbl</code> will be used as a
 </div><div class='output co'>#&gt; <span class='message'>frequency = 12 observations per 1 year</span></div><div class='input'><span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  531ms 
+#&gt; Fit time:  482ms 
 #&gt; Series: outcome 
 #&gt; Model:  NNAR(1,1,10)[12] 
 #&gt; Call:   forecast::nnetar(y = outcome, p = p, P = P, size = size, repeats = repeats, 

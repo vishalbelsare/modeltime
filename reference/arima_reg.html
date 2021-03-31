@@ -326,12 +326,15 @@ names in each engine:</p><table class='table'>
 <p>Other options can be set using <code><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine()</a></code>.</p>
 <p><strong>auto_arima (default engine)</strong></p>
 <p>The engine uses <code><a href='https://pkg.robjhyndman.com/forecast/reference/auto.arima.html'>forecast::auto.arima()</a></code>.</p>
-<p>Function Parameters:</p><pre><span class='co'>## function (y, d = NA, D = NA, max.p = 5, max.q = 5, max.P = 2, max.Q = 2, max.order = 5, max.d = 2, max.D = 1, </span>
-<span class='co'>##     start.p = 2, start.q = 2, start.P = 1, start.Q = 1, stationary = FALSE, seasonal = TRUE, ic = c("aicc", </span>
-<span class='co'>##         "aic", "bic"), stepwise = TRUE, nmodels = 94, trace = FALSE, approximation = (length(x) &gt; 150 | </span>
-<span class='co'>##         frequency(x) &gt; 12), method = NULL, truncate = NULL, xreg = NULL, test = c("kpss", "adf", "pp"), </span>
-<span class='co'>##     test.args = list(), seasonal.test = c("seas", "ocsb", "hegy", "ch"), seasonal.test.args = list(), allowdrift = TRUE, </span>
-<span class='co'>##     allowmean = TRUE, lambda = NULL, biasadj = FALSE, parallel = FALSE, num.cores = 2, x = y, ...)</span>
+<p>Function Parameters:</p><pre><span class='co'>## function (y, d = NA, D = NA, max.p = 5, max.q = 5, max.P = 2, max.Q = 2, </span>
+<span class='co'>##     max.order = 5, max.d = 2, max.D = 1, start.p = 2, start.q = 2, start.P = 1, </span>
+<span class='co'>##     start.Q = 1, stationary = FALSE, seasonal = TRUE, ic = c("aicc", "aic", </span>
+<span class='co'>##         "bic"), stepwise = TRUE, nmodels = 94, trace = FALSE, approximation = (length(x) &gt; </span>
+<span class='co'>##         150 | frequency(x) &gt; 12), method = NULL, truncate = NULL, xreg = NULL, </span>
+<span class='co'>##     test = c("kpss", "adf", "pp"), test.args = list(), seasonal.test = c("seas", </span>
+<span class='co'>##         "ocsb", "hegy", "ch"), seasonal.test.args = list(), allowdrift = TRUE, </span>
+<span class='co'>##     allowmean = TRUE, lambda = NULL, biasadj = FALSE, parallel = FALSE, </span>
+<span class='co'>##     num.cores = 2, x = y, ...)</span>
 </pre>
 
 <p>The <em>MAXIMUM</em> nonseasonal ARIMA terms (<code>max.p</code>, <code>max.d</code>, <code>max.q</code>) and
@@ -347,9 +350,9 @@ The <code><a href='https://pkg.robjhyndman.com/forecast/reference/auto.arima.htm
 
 <p><strong>arima</strong></p>
 <p>The engine uses <code><a href='https://pkg.robjhyndman.com/forecast/reference/Arima.html'>forecast::Arima()</a></code>.</p>
-<p>Function Parameters:</p><pre><span class='co'>## function (y, order = c(0, 0, 0), seasonal = c(0, 0, 0), xreg = NULL, include.mean = TRUE, include.drift = FALSE, </span>
-<span class='co'>##     include.constant, lambda = model$lambda, biasadj = FALSE, method = c("CSS-ML", "ML", "CSS"), model = NULL, </span>
-<span class='co'>##     x = y, ...)</span>
+<p>Function Parameters:</p><pre><span class='co'>## function (y, order = c(0, 0, 0), seasonal = c(0, 0, 0), xreg = NULL, include.mean = TRUE, </span>
+<span class='co'>##     include.drift = FALSE, include.constant, lambda = model$lambda, biasadj = FALSE, </span>
+<span class='co'>##     method = c("CSS-ML", "ML", "CSS"), model = NULL, x = y, ...)</span>
 </pre>
 
 <p>The nonseasonal ARIMA terms (<code>order</code>) and seasonal ARIMA terms (<code>seasonal</code>)
@@ -454,7 +457,7 @@ and the <code>date</code> feature. Only <code>month.lbl</code> will be used as a
 </div><div class='output co'>#&gt; <span class='message'>frequency = 12 observations per 1 year</span></div><div class='input'><span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  551ms 
+#&gt; Fit time:  664ms 
 #&gt; Series: outcome 
 #&gt; ARIMA(0,1,1)(1,1,1)[12] 
 #&gt; 
@@ -486,7 +489,7 @@ and the <code>date</code> feature. Only <code>month.lbl</code> will be used as a
 <span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  976ms 
+#&gt; Fit time:  948ms 
 #&gt; Series: outcome 
 #&gt; ARIMA(3,1,3)(1,0,1)[12] 
 #&gt; 

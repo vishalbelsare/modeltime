@@ -299,11 +299,13 @@ names in each engine:</p><table class='table'>
 <p>Other options can be set using <code><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine()</a></code>.</p>
 <p><strong>ets (default engine)</strong></p>
 <p>The engine uses <code><a href='https://pkg.robjhyndman.com/forecast/reference/ets.html'>forecast::ets()</a></code>.</p>
-<p>Function Parameters:</p><pre><span class='co'>## function (y, model = "ZZZ", damped = NULL, alpha = NULL, beta = NULL, gamma = NULL, phi = NULL, additive.only = FALSE, </span>
-<span class='co'>##     lambda = NULL, biasadj = FALSE, lower = c(rep(1e-04, 3), 0.8), upper = c(rep(0.9999, 3), 0.98), opt.crit = c("lik", </span>
-<span class='co'>##         "amse", "mse", "sigma", "mae"), nmse = 3, bounds = c("both", "usual", "admissible"), ic = c("aicc", </span>
-<span class='co'>##         "aic", "bic"), restrict = TRUE, allow.multiplicative.trend = FALSE, use.initial.values = FALSE, </span>
-<span class='co'>##     na.action = c("na.contiguous", "na.interp", "na.fail"), ...)</span>
+<p>Function Parameters:</p><pre><span class='co'>## function (y, model = "ZZZ", damped = NULL, alpha = NULL, beta = NULL, gamma = NULL, </span>
+<span class='co'>##     phi = NULL, additive.only = FALSE, lambda = NULL, biasadj = FALSE, </span>
+<span class='co'>##     lower = c(rep(1e-04, 3), 0.8), upper = c(rep(0.9999, 3), 0.98), opt.crit = c("lik", </span>
+<span class='co'>##         "amse", "mse", "sigma", "mae"), nmse = 3, bounds = c("both", "usual", </span>
+<span class='co'>##         "admissible"), ic = c("aicc", "aic", "bic"), restrict = TRUE, allow.multiplicative.trend = FALSE, </span>
+<span class='co'>##     use.initial.values = FALSE, na.action = c("na.contiguous", "na.interp", </span>
+<span class='co'>##         "na.fail"), ...)</span>
 </pre>
 
 <p>The main arguments are <code>model</code> and <code>damped</code> are defined using:</p><ul>
