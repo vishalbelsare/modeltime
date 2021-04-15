@@ -228,13 +228,7 @@ Modeltime Table and retrains each model on <em>new data</em> re-using the parame
 and preprocessing steps used during the training process.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modeltime_refit</span><span class='op'>(</span>
-  <span class='va'>object</span>,
-  <span class='va'>data</span>,
-  .cores <span class='op'>=</span> <span class='fu'>parallel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/parallel/detectCores.html'>detectCores</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>1</span>,
-  <span class='va'>...</span>,
-  control <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>modeltime_refit</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>data</span>, <span class='va'>...</span>, .cores <span class='op'>=</span> <span class='fl'>1</span>, control <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -248,13 +242,13 @@ and preprocessing steps used during the training process.</p>
       <td><p>A <code>tibble</code> that contains data to retrain the model(s) using.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Under construction. Additional arguments to control refitting.</p></td>
+    </tr>
+    <tr>
       <th>.cores</th>
       <td><p>The number of cores to use in the computation. If cores &gt; 1, parallel computation
 will be used. Default is 1.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Under construction. Additional arguments to control refitting.</p></td>
     </tr>
     <tr>
       <th>control</th>

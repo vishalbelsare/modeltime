@@ -326,10 +326,13 @@ names in each engine:</p><table class='table'>
 <p>Other options can be set using <code><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine()</a></code>.</p>
 <p><strong>ets (default engine)</strong></p>
 <p>The engine uses <code><a href='https://pkg.robjhyndman.com/forecast/reference/ets.html'>forecast::ets()</a></code>.</p>
-<p>Function Parameters:</p><pre><span class='co'>## function (y, model = "ZZZ", damped = NULL, alpha = NULL, beta = NULL, gamma = NULL, phi = NULL, additive.only = FALSE, lambda = NULL, </span>
-<span class='co'>##     biasadj = FALSE, lower = c(rep(1e-04, 3), 0.8), upper = c(rep(0.9999, 3), 0.98), opt.crit = c("lik", "amse", "mse", "sigma", "mae"), </span>
-<span class='co'>##     nmse = 3, bounds = c("both", "usual", "admissible"), ic = c("aicc", "aic", "bic"), restrict = TRUE, allow.multiplicative.trend = FALSE, </span>
-<span class='co'>##     use.initial.values = FALSE, na.action = c("na.contiguous", "na.interp", "na.fail"), ...)</span>
+<p>Function Parameters:</p><pre><span class='co'>## function (y, model = "ZZZ", damped = NULL, alpha = NULL, beta = NULL, gamma = NULL, </span>
+<span class='co'>##     phi = NULL, additive.only = FALSE, lambda = NULL, biasadj = FALSE, </span>
+<span class='co'>##     lower = c(rep(1e-04, 3), 0.8), upper = c(rep(0.9999, 3), 0.98), opt.crit = c("lik", </span>
+<span class='co'>##         "amse", "mse", "sigma", "mae"), nmse = 3, bounds = c("both", "usual", </span>
+<span class='co'>##         "admissible"), ic = c("aicc", "aic", "bic"), restrict = TRUE, allow.multiplicative.trend = FALSE, </span>
+<span class='co'>##     use.initial.values = FALSE, na.action = c("na.contiguous", "na.interp", </span>
+<span class='co'>##         "na.fail"), ...)</span>
 </pre>
 
 <p>The main arguments are <code>model</code> and <code>damped</code> are defined using:</p><ul>
@@ -441,7 +444,7 @@ There are 3 ways to specify:</p><ol>
 </div><div class='output co'>#&gt; <span class='message'>frequency = 12 observations per 1 year</span></div><div class='input'><span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  1.4s 
+#&gt; Fit time:  1.5s 
 #&gt; ETS(A,A,A) 
 #&gt; 
 #&gt; Call:
@@ -483,7 +486,7 @@ There are 3 ways to specify:</p><ol>
 <span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  328ms 
+#&gt; Fit time:  338ms 
 #&gt; ETS(M,Ad,M) 
 #&gt; 
 #&gt; Call:
@@ -522,7 +525,7 @@ There are 3 ways to specify:</p><ol>
 <span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  1.5s 
+#&gt; Fit time:  1.7s 
 #&gt; Croston Method
 #&gt; ---
 #&gt; </span><span style='color: #949494;'># A tibble: 244 x 1</span><span>
@@ -552,7 +555,7 @@ There are 3 ways to specify:</p><ol>
 <span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  12ms 
+#&gt; Fit time:  13ms 
 #&gt; Theta Method
 #&gt; ---
 #&gt; </span><span style='color: #949494;'># A tibble: 244 x 5</span><span>
