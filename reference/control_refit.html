@@ -224,7 +224,7 @@
     <p>Control aspects of the <code><a href='modeltime_refit.html'>modeltime_refit()</a></code> process.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>control_refit</span><span class='op'>(</span>verbose <span class='op'>=</span> <span class='cn'>FALSE</span>, allow_par <span class='op'>=</span> <span class='cn'>TRUE</span>, cores <span class='op'>=</span> <span class='fl'>1</span>, packages <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>control_refit</span><span class='op'>(</span>verbose <span class='op'>=</span> <span class='cn'>FALSE</span>, allow_par <span class='op'>=</span> <span class='cn'>FALSE</span>, cores <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1</span>, packages <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -235,11 +235,12 @@
     </tr>
     <tr>
       <th>allow_par</th>
-      <td><p>Logical to allow parallel computation</p></td>
+      <td><p>Logical to allow parallel computation. Default: <code>FALSE</code> (single threaded).</p></td>
     </tr>
     <tr>
       <th>cores</th>
-      <td><p>Number of cores for computation</p></td>
+      <td><p>Number of cores for computation. If -1, uses all available physical cores.
+Default: <code>-1</code>.</p></td>
     </tr>
     <tr>
       <th>packages</th>
