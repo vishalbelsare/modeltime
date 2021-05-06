@@ -244,8 +244,11 @@ Default: <code>-1</code>.</p></td>
     </tr>
     <tr>
       <th>packages</th>
-      <td><p>An optional character string of R package names that should be loaded
-(by namespace) during parallel processing.</p></td>
+      <td><p>An optional character string of additional R package names that should be loaded
+during parallel processing.</p><ul>
+<li><p>Packages in your namespace are loaded by default</p></li>
+<li><p>Key Packages are loaded by default: <code>tidymodels</code>, <code>parsnip</code>, <code>modeltime</code>, <code>dplyr</code>, <code>stats</code>, <code>lubridate</code> and <code>timetk</code>.</p></li>
+</ul></td>
     </tr>
     </table>
 
