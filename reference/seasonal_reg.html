@@ -384,20 +384,20 @@ and the <code>date</code> feature. Only <code>month.lbl</code> will be used as a
 
 <span class='co'># Data</span>
 <span class='va'>taylor_30_min</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 4,032 x 2</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 4,032 x 2</span>
 #&gt;    date                value
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 2000-06-05 </span><span style='color: #949494;'>00:00:00</span><span> </span><span style='text-decoration: underline;'>22</span><span>262
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2000-06-05 </span><span style='color: #949494;'>00:30:00</span><span> </span><span style='text-decoration: underline;'>21</span><span>756
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 2000-06-05 </span><span style='color: #949494;'>01:00:00</span><span> </span><span style='text-decoration: underline;'>22</span><span>247
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 2000-06-05 </span><span style='color: #949494;'>01:30:00</span><span> </span><span style='text-decoration: underline;'>22</span><span>759
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 2000-06-05 </span><span style='color: #949494;'>02:00:00</span><span> </span><span style='text-decoration: underline;'>22</span><span>549
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 2000-06-05 </span><span style='color: #949494;'>02:30:00</span><span> </span><span style='text-decoration: underline;'>22</span><span>313
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 2000-06-05 </span><span style='color: #949494;'>03:00:00</span><span> </span><span style='text-decoration: underline;'>22</span><span>128
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 2000-06-05 </span><span style='color: #949494;'>03:30:00</span><span> </span><span style='text-decoration: underline;'>21</span><span>860
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 2000-06-05 </span><span style='color: #949494;'>04:00:00</span><span> </span><span style='text-decoration: underline;'>21</span><span>751
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 2000-06-05 </span><span style='color: #949494;'>04:30:00</span><span> </span><span style='text-decoration: underline;'>21</span><span>336
-#&gt; </span><span style='color: #949494;'># … with 4,022 more rows</span><span></div><div class='input'>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;dttm&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> 2000-06-05 <span style='color: #949494;'>00:00:00</span> <span style='text-decoration: underline;'>22</span>262
+#&gt; <span style='color: #BCBCBC;'> 2</span> 2000-06-05 <span style='color: #949494;'>00:30:00</span> <span style='text-decoration: underline;'>21</span>756
+#&gt; <span style='color: #BCBCBC;'> 3</span> 2000-06-05 <span style='color: #949494;'>01:00:00</span> <span style='text-decoration: underline;'>22</span>247
+#&gt; <span style='color: #BCBCBC;'> 4</span> 2000-06-05 <span style='color: #949494;'>01:30:00</span> <span style='text-decoration: underline;'>22</span>759
+#&gt; <span style='color: #BCBCBC;'> 5</span> 2000-06-05 <span style='color: #949494;'>02:00:00</span> <span style='text-decoration: underline;'>22</span>549
+#&gt; <span style='color: #BCBCBC;'> 6</span> 2000-06-05 <span style='color: #949494;'>02:30:00</span> <span style='text-decoration: underline;'>22</span>313
+#&gt; <span style='color: #BCBCBC;'> 7</span> 2000-06-05 <span style='color: #949494;'>03:00:00</span> <span style='text-decoration: underline;'>22</span>128
+#&gt; <span style='color: #BCBCBC;'> 8</span> 2000-06-05 <span style='color: #949494;'>03:30:00</span> <span style='text-decoration: underline;'>21</span>860
+#&gt; <span style='color: #BCBCBC;'> 9</span> 2000-06-05 <span style='color: #949494;'>04:00:00</span> <span style='text-decoration: underline;'>21</span>751
+#&gt; <span style='color: #BCBCBC;'>10</span> 2000-06-05 <span style='color: #949494;'>04:30:00</span> <span style='text-decoration: underline;'>21</span>336
+#&gt; <span style='color: #949494;'># … with 4,022 more rows</span></div><div class='input'>
 <span class='co'># Split Data 80/20</span>
 <span class='va'>splits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rsample.tidymodels.org/reference/initial_split.html'>initial_time_split</a></span><span class='op'>(</span><span class='va'>taylor_30_min</span>, prop <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>)</span>
 
@@ -413,13 +413,13 @@ and the <code>date</code> feature. Only <code>month.lbl</code> will be used as a
 </div><div class='output co'>#&gt; <span class='message'>frequency = 48 observations per 1 day</span></div><div class='input'><span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  510ms 
+#&gt; Fit time:  443ms 
 #&gt; SEASONAL DECOMP: ETS(A,Ad,N)
 #&gt; 
-#&gt; </span><span style='color: #949494;'># A tibble: 1 x 5</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 1 x 5</span>
 #&gt;      aic    bic   aicc loglik       mse
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> -</span><span style='color: #BB0000;text-decoration: underline;'>6</span><span style='color: #BB0000;'>238.</span><span> -</span><span style='color: #BB0000;text-decoration: underline;'>6</span><span style='color: #BB0000;'>201.</span><span> -</span><span style='color: #BB0000;text-decoration: underline;'>6</span><span style='color: #BB0000;'>238.</span><span>  </span><span style='text-decoration: underline;'>3</span><span>125. 0.000</span><span style='text-decoration: underline;'>044</span><span>7</div><div class='input'>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> -<span style='color: #BB0000; text-decoration: underline;'>6</span><span style='color: #BB0000;'>238.</span> -<span style='color: #BB0000; text-decoration: underline;'>6</span><span style='color: #BB0000;'>201.</span> -<span style='color: #BB0000; text-decoration: underline;'>6</span><span style='color: #BB0000;'>238.</span>  <span style='text-decoration: underline;'>3</span>125. 0.000<span style='text-decoration: underline;'>044</span>7</div><div class='input'>
 
 <span class='co'># ---- STLM ARIMA ----</span>
 
@@ -433,7 +433,7 @@ and the <code>date</code> feature. Only <code>month.lbl</code> will be used as a
 </div><div class='output co'>#&gt; <span class='message'>frequency = 48 observations per 1 day</span></div><div class='input'><span class='va'>model_fit</span>
 </div><div class='output co'>#&gt; parsnip model object
 #&gt; 
-#&gt; Fit time:  858ms 
+#&gt; Fit time:  851ms 
 #&gt; SEASONAL DECOMP: ARIMA(3,1,2)
 #&gt; 
 #&gt; Series: x 
@@ -446,7 +446,7 @@ and the <code>date</code> feature. Only <code>month.lbl</code> will be used as a
 #&gt; 
 #&gt; sigma^2 estimated as 4.194e-05:  log likelihood=11676.26
 #&gt; AIC=-23340.52   AICc=-23340.5   BIC=-23304.05</div><div class='input'>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
