@@ -221,9 +221,9 @@
 <div id="setup-parallel-backend" class="section level2">
 <h2 class="hasAnchor">
 <a href="#setup-parallel-backend" class="anchor"></a>Setup Parallel Backend</h2>
-<p>I have six (6) available cores on my machine. I’ll set up this tutorial to use all 6 cores.</p>
+<p>I’ll set up this tutorial to use two (2) cores. To detect how many physical cores you have, you can run <code><a href="https://rdrr.io/r/parallel/detectCores.html">parallel::detectCores(logical = FALSE)</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeCluster</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
 <span class="fu">doParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="load-data" class="section level2">
@@ -353,7 +353,7 @@
 </ul>
 </li>
 <li><p><strong>verbose:</strong> Will return important messages showing the progress of the fitting operation.</p></li>
-<li><p><strong>cores:</strong> The cores that the user has set up. Since we’ve already set up <code>doParallel</code> to use 6 cores, the control recognizes this.</p></li>
+<li><p><strong>cores:</strong> The cores that the user has set up. Since we’ve already set up <code>doParallel</code> to use 2 cores, the control recognizes this.</p></li>
 <li><p><strong>packages:</strong> The packages are packages that will be sent to each of the workers.</p></li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -364,7 +364,7 @@
 <span class="co">#&gt; workflowset control object</span>
 <span class="co">#&gt; --------------------------</span>
 <span class="co">#&gt; allow_par : TRUE </span>
-<span class="co">#&gt; cores     : 6 </span>
+<span class="co">#&gt; cores     : 2 </span>
 <span class="co">#&gt; verbose   : TRUE </span>
 <span class="co">#&gt; packages  : modeltime parsnip dplyr stats lubridate tidymodels timetk forcats stringr readr tidyverse yardstick workflowsets workflows tune tidyr tibble rsample recipes purrr modeldata infer ggplot2 dials scales broom doParallel iterators foreach parallel graphics grDevices utils datasets methods base</span></code></pre></div>
 </div>
@@ -381,11 +381,11 @@
       allow_par <span class="op">=</span> <span class="cn">TRUE</span>
     <span class="op">)</span>
   <span class="op">)</span>
-<span class="co">#&gt; Using existing parallel backend with 6 clusters (cores)...</span>
-<span class="co">#&gt;  Beginning Parallel Loop | 0.006 seconds</span>
-<span class="co">#&gt;  Finishing parallel backend. Clusters are remaining open. | 26.912 seconds</span>
+<span class="co">#&gt; Using existing parallel backend with 2 clusters (cores)...</span>
+<span class="co">#&gt;  Beginning Parallel Loop | 0.005 seconds</span>
+<span class="co">#&gt;  Finishing parallel backend. Clusters are remaining open. | 14.462 seconds</span>
 <span class="co">#&gt;  Close clusters by running: `foreach::registerDoSEQ()`.</span>
-<span class="co">#&gt;  Total time | 26.913 seconds</span></code></pre></div>
+<span class="co">#&gt;  Total time | 14.463 seconds</span></code></pre></div>
 <p>This returns a modeltime table.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model_parallel_tbl</span>
@@ -425,7 +425,7 @@
 <span class="co">#&gt; ✔ Model Successfully Fitted: recipe_boost_tree_5</span>
 <span class="co">#&gt; ℹ Fitting Model: recipe_boost_tree_6</span>
 <span class="co">#&gt; ✔ Model Successfully Fitted: recipe_boost_tree_6</span>
-<span class="co">#&gt; Total time | 16.82 seconds</span></code></pre></div>
+<span class="co">#&gt; Total time | 14.685 seconds</span></code></pre></div>
 </div>
 </div>
 <div id="accuracy-assessment" class="section level2">
@@ -437,12 +437,12 @@
   <span class="fu"><a href="../reference/modeltime_calibrate.html">modeltime_calibrate</a></span><span class="op">(</span><span class="fu"><a href="https://rsample.tidymodels.org/reference/initial_split.html">testing</a></span><span class="op">(</span><span class="va">splits</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/modeltime_accuracy.html">modeltime_accuracy</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/table_modeltime_accuracy.html">table_modeltime_accuracy</a></span><span class="op">(</span>.interactive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<div id="knoylbwwfs" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="bndxghwsxe" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#knoylbwwfs .gt_table {
+#bndxghwsxe .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -467,7 +467,7 @@
   border-left-color: #D3D3D3;
 }
 
-#knoylbwwfs .gt_heading {
+#bndxghwsxe .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -479,7 +479,7 @@
   border-right-color: #D3D3D3;
 }
 
-#knoylbwwfs .gt_title {
+#bndxghwsxe .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -489,7 +489,7 @@
   border-bottom-width: 0;
 }
 
-#knoylbwwfs .gt_subtitle {
+#bndxghwsxe .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -499,13 +499,13 @@
   border-top-width: 0;
 }
 
-#knoylbwwfs .gt_bottom_border {
+#bndxghwsxe .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#knoylbwwfs .gt_col_headings {
+#bndxghwsxe .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -520,7 +520,7 @@
   border-right-color: #D3D3D3;
 }
 
-#knoylbwwfs .gt_col_heading {
+#bndxghwsxe .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -540,7 +540,7 @@
   overflow-x: hidden;
 }
 
-#knoylbwwfs .gt_column_spanner_outer {
+#bndxghwsxe .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -552,15 +552,15 @@
   padding-right: 4px;
 }
 
-#knoylbwwfs .gt_column_spanner_outer:first-child {
+#bndxghwsxe .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#knoylbwwfs .gt_column_spanner_outer:last-child {
+#bndxghwsxe .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#knoylbwwfs .gt_column_spanner {
+#bndxghwsxe .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -572,7 +572,7 @@
   width: 100%;
 }
 
-#knoylbwwfs .gt_group_heading {
+#bndxghwsxe .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -594,7 +594,7 @@
   vertical-align: middle;
 }
 
-#knoylbwwfs .gt_empty_group_heading {
+#bndxghwsxe .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -609,15 +609,15 @@
   vertical-align: middle;
 }
 
-#knoylbwwfs .gt_from_md > :first-child {
+#bndxghwsxe .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#knoylbwwfs .gt_from_md > :last-child {
+#bndxghwsxe .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#knoylbwwfs .gt_row {
+#bndxghwsxe .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -636,7 +636,7 @@
   overflow-x: hidden;
 }
 
-#knoylbwwfs .gt_stub {
+#bndxghwsxe .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -648,7 +648,7 @@
   padding-left: 12px;
 }
 
-#knoylbwwfs .gt_summary_row {
+#bndxghwsxe .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -658,7 +658,7 @@
   padding-right: 5px;
 }
 
-#knoylbwwfs .gt_first_summary_row {
+#bndxghwsxe .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -668,7 +668,7 @@
   border-top-color: #D3D3D3;
 }
 
-#knoylbwwfs .gt_grand_summary_row {
+#bndxghwsxe .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -678,7 +678,7 @@
   padding-right: 5px;
 }
 
-#knoylbwwfs .gt_first_grand_summary_row {
+#bndxghwsxe .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -688,11 +688,11 @@
   border-top-color: #D3D3D3;
 }
 
-#knoylbwwfs .gt_striped {
+#bndxghwsxe .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#knoylbwwfs .gt_table_body {
+#bndxghwsxe .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -701,7 +701,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#knoylbwwfs .gt_footnotes {
+#bndxghwsxe .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -715,13 +715,13 @@
   border-right-color: #D3D3D3;
 }
 
-#knoylbwwfs .gt_footnote {
+#bndxghwsxe .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#knoylbwwfs .gt_sourcenotes {
+#bndxghwsxe .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -735,41 +735,41 @@
   border-right-color: #D3D3D3;
 }
 
-#knoylbwwfs .gt_sourcenote {
+#bndxghwsxe .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#knoylbwwfs .gt_left {
+#bndxghwsxe .gt_left {
   text-align: left;
 }
 
-#knoylbwwfs .gt_center {
+#bndxghwsxe .gt_center {
   text-align: center;
 }
 
-#knoylbwwfs .gt_right {
+#bndxghwsxe .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#knoylbwwfs .gt_font_normal {
+#bndxghwsxe .gt_font_normal {
   font-weight: normal;
 }
 
-#knoylbwwfs .gt_font_bold {
+#bndxghwsxe .gt_font_bold {
   font-weight: bold;
 }
 
-#knoylbwwfs .gt_font_italic {
+#bndxghwsxe .gt_font_italic {
   font-style: italic;
 }
 
-#knoylbwwfs .gt_super {
+#bndxghwsxe .gt_super {
   font-size: 65%;
 }
 
-#knoylbwwfs .gt_footnote_marks {
+#bndxghwsxe .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
