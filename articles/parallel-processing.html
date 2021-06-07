@@ -221,16 +221,13 @@
 <div id="setup-parallel-backend" class="section level2">
 <h2 class="hasAnchor">
 <a href="#setup-parallel-backend" class="anchor"></a>Setup Parallel Backend</h2>
-<p>I’ll set up this tutorial to use two (2) cores. To detect how many physical cores you have, you can run <code><a href="https://rdrr.io/r/parallel/detectCores.html">parallel::detectCores(logical = FALSE)</a></code>.</p>
+<p>I’ll set up this tutorial to use two (2) cores.</p>
+<ul>
+<li>To simplify creating clusters, <code>modeltime</code> includes <code><a href="../reference/parallel_start.html">parallel_start()</a></code>. We can simply supply the number of cores we’d like to use.</li>
+<li>To detect how many physical cores you have, you can run <code><a href="https://rdrr.io/r/parallel/detectCores.html">parallel::detectCores(logical = FALSE)</a></code>.</li>
+</ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
-<span class="fu">doParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
-<span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html">clusterCall</a></span><span class="op">(</span><span class="va">cl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] "/home/runner/work/_temp/Library" "/opt/R/4.1.0/lib/R/library"     </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] "/home/runner/work/_temp/Library" "/opt/R/4.1.0/lib/R/library"</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/parallel_start.html">parallel_start</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="load-data" class="section level2">
 <h2 class="hasAnchor">
@@ -389,9 +386,9 @@
   <span class="op">)</span>
 <span class="co">#&gt; Using existing parallel backend with 2 clusters (cores)...</span>
 <span class="co">#&gt;  Beginning Parallel Loop | 0.006 seconds</span>
-<span class="co">#&gt;  Finishing parallel backend. Clusters are remaining open. | 16.227 seconds</span>
+<span class="co">#&gt;  Finishing parallel backend. Clusters are remaining open. | 15.525 seconds</span>
 <span class="co">#&gt;  Close clusters by running: `foreach::registerDoSEQ()`.</span>
-<span class="co">#&gt;  Total time | 16.227 seconds</span></code></pre></div>
+<span class="co">#&gt;  Total time | 15.525 seconds</span></code></pre></div>
 <p>This returns a modeltime table.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model_parallel_tbl</span>
@@ -431,7 +428,7 @@
 <span class="co">#&gt; ✔ Model Successfully Fitted: recipe_boost_tree_5</span>
 <span class="co">#&gt; ℹ Fitting Model: recipe_boost_tree_6</span>
 <span class="co">#&gt; ✔ Model Successfully Fitted: recipe_boost_tree_6</span>
-<span class="co">#&gt; Total time | 16.785 seconds</span></code></pre></div>
+<span class="co">#&gt; Total time | 17.788 seconds</span></code></pre></div>
 </div>
 </div>
 <div id="accuracy-assessment" class="section level2">
@@ -443,12 +440,12 @@
   <span class="fu"><a href="../reference/modeltime_calibrate.html">modeltime_calibrate</a></span><span class="op">(</span><span class="fu"><a href="https://rsample.tidymodels.org/reference/initial_split.html">testing</a></span><span class="op">(</span><span class="va">splits</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/modeltime_accuracy.html">modeltime_accuracy</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/table_modeltime_accuracy.html">table_modeltime_accuracy</a></span><span class="op">(</span>.interactive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<div id="trsxstiqgr" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="kzeemxtdda" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#trsxstiqgr .gt_table {
+#kzeemxtdda .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -473,7 +470,7 @@
   border-left-color: #D3D3D3;
 }
 
-#trsxstiqgr .gt_heading {
+#kzeemxtdda .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -485,7 +482,7 @@
   border-right-color: #D3D3D3;
 }
 
-#trsxstiqgr .gt_title {
+#kzeemxtdda .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -495,7 +492,7 @@
   border-bottom-width: 0;
 }
 
-#trsxstiqgr .gt_subtitle {
+#kzeemxtdda .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -505,13 +502,13 @@
   border-top-width: 0;
 }
 
-#trsxstiqgr .gt_bottom_border {
+#kzeemxtdda .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#trsxstiqgr .gt_col_headings {
+#kzeemxtdda .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -526,7 +523,7 @@
   border-right-color: #D3D3D3;
 }
 
-#trsxstiqgr .gt_col_heading {
+#kzeemxtdda .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -546,7 +543,7 @@
   overflow-x: hidden;
 }
 
-#trsxstiqgr .gt_column_spanner_outer {
+#kzeemxtdda .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -558,15 +555,15 @@
   padding-right: 4px;
 }
 
-#trsxstiqgr .gt_column_spanner_outer:first-child {
+#kzeemxtdda .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#trsxstiqgr .gt_column_spanner_outer:last-child {
+#kzeemxtdda .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#trsxstiqgr .gt_column_spanner {
+#kzeemxtdda .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -578,7 +575,7 @@
   width: 100%;
 }
 
-#trsxstiqgr .gt_group_heading {
+#kzeemxtdda .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -600,7 +597,7 @@
   vertical-align: middle;
 }
 
-#trsxstiqgr .gt_empty_group_heading {
+#kzeemxtdda .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -615,15 +612,15 @@
   vertical-align: middle;
 }
 
-#trsxstiqgr .gt_from_md > :first-child {
+#kzeemxtdda .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#trsxstiqgr .gt_from_md > :last-child {
+#kzeemxtdda .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#trsxstiqgr .gt_row {
+#kzeemxtdda .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -642,7 +639,7 @@
   overflow-x: hidden;
 }
 
-#trsxstiqgr .gt_stub {
+#kzeemxtdda .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -654,7 +651,7 @@
   padding-left: 12px;
 }
 
-#trsxstiqgr .gt_summary_row {
+#kzeemxtdda .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -664,7 +661,7 @@
   padding-right: 5px;
 }
 
-#trsxstiqgr .gt_first_summary_row {
+#kzeemxtdda .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -674,7 +671,7 @@
   border-top-color: #D3D3D3;
 }
 
-#trsxstiqgr .gt_grand_summary_row {
+#kzeemxtdda .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -684,7 +681,7 @@
   padding-right: 5px;
 }
 
-#trsxstiqgr .gt_first_grand_summary_row {
+#kzeemxtdda .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -694,11 +691,11 @@
   border-top-color: #D3D3D3;
 }
 
-#trsxstiqgr .gt_striped {
+#kzeemxtdda .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#trsxstiqgr .gt_table_body {
+#kzeemxtdda .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -707,7 +704,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#trsxstiqgr .gt_footnotes {
+#kzeemxtdda .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -721,13 +718,13 @@
   border-right-color: #D3D3D3;
 }
 
-#trsxstiqgr .gt_footnote {
+#kzeemxtdda .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#trsxstiqgr .gt_sourcenotes {
+#kzeemxtdda .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -741,41 +738,41 @@
   border-right-color: #D3D3D3;
 }
 
-#trsxstiqgr .gt_sourcenote {
+#kzeemxtdda .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#trsxstiqgr .gt_left {
+#kzeemxtdda .gt_left {
   text-align: left;
 }
 
-#trsxstiqgr .gt_center {
+#kzeemxtdda .gt_center {
   text-align: center;
 }
 
-#trsxstiqgr .gt_right {
+#kzeemxtdda .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#trsxstiqgr .gt_font_normal {
+#kzeemxtdda .gt_font_normal {
   font-weight: normal;
 }
 
-#trsxstiqgr .gt_font_bold {
+#kzeemxtdda .gt_font_bold {
   font-weight: bold;
 }
 
-#trsxstiqgr .gt_font_italic {
+#kzeemxtdda .gt_font_italic {
   font-style: italic;
 }
 
-#trsxstiqgr .gt_super {
+#kzeemxtdda .gt_super {
   font-size: 65%;
 }
 
-#trsxstiqgr .gt_footnote_marks {
+#kzeemxtdda .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -884,6 +881,13 @@
     .interactive <span class="op">=</span> <span class="cn">FALSE</span>
   <span class="op">)</span></code></pre></div>
 <p><img src="parallel-processing_files/figure-html/unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+<div id="closing-clusters" class="section level2">
+<h2 class="hasAnchor">
+<a href="#closing-clusters" class="anchor"></a>Closing Clusters</h2>
+<p>We can close the parallel clusters using <code><a href="../reference/parallel_start.html">parallel_stop()</a></code>.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/parallel_start.html">parallel_stop</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="summary" class="section level2">
 <h2 class="hasAnchor">
