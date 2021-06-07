@@ -224,7 +224,13 @@
 <p>I’ll set up this tutorial to use two (2) cores. To detect how many physical cores you have, you can run <code><a href="https://rdrr.io/r/parallel/detectCores.html">parallel::detectCores(logical = FALSE)</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
-<span class="fu">doParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></code></pre></div>
+<span class="fu">doParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
+<span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html">clusterCall</a></span><span class="op">(</span><span class="va">cl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/libPaths.html">.libPaths</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] "/home/runner/work/_temp/Library" "/opt/R/4.1.0/lib/R/library"     </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; [1] "/home/runner/work/_temp/Library" "/opt/R/4.1.0/lib/R/library"</span></code></pre></div>
 </div>
 <div id="load-data" class="section level2">
 <h2 class="hasAnchor">
@@ -382,10 +388,10 @@
     <span class="op">)</span>
   <span class="op">)</span>
 <span class="co">#&gt; Using existing parallel backend with 2 clusters (cores)...</span>
-<span class="co">#&gt;  Beginning Parallel Loop | 0.005 seconds</span>
-<span class="co">#&gt;  Finishing parallel backend. Clusters are remaining open. | 14.462 seconds</span>
+<span class="co">#&gt;  Beginning Parallel Loop | 0.006 seconds</span>
+<span class="co">#&gt;  Finishing parallel backend. Clusters are remaining open. | 16.227 seconds</span>
 <span class="co">#&gt;  Close clusters by running: `foreach::registerDoSEQ()`.</span>
-<span class="co">#&gt;  Total time | 14.463 seconds</span></code></pre></div>
+<span class="co">#&gt;  Total time | 16.227 seconds</span></code></pre></div>
 <p>This returns a modeltime table.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model_parallel_tbl</span>
@@ -425,7 +431,7 @@
 <span class="co">#&gt; ✔ Model Successfully Fitted: recipe_boost_tree_5</span>
 <span class="co">#&gt; ℹ Fitting Model: recipe_boost_tree_6</span>
 <span class="co">#&gt; ✔ Model Successfully Fitted: recipe_boost_tree_6</span>
-<span class="co">#&gt; Total time | 14.685 seconds</span></code></pre></div>
+<span class="co">#&gt; Total time | 16.785 seconds</span></code></pre></div>
 </div>
 </div>
 <div id="accuracy-assessment" class="section level2">
@@ -437,12 +443,12 @@
   <span class="fu"><a href="../reference/modeltime_calibrate.html">modeltime_calibrate</a></span><span class="op">(</span><span class="fu"><a href="https://rsample.tidymodels.org/reference/initial_split.html">testing</a></span><span class="op">(</span><span class="va">splits</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/modeltime_accuracy.html">modeltime_accuracy</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/table_modeltime_accuracy.html">table_modeltime_accuracy</a></span><span class="op">(</span>.interactive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<div id="bndxghwsxe" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="trsxstiqgr" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#bndxghwsxe .gt_table {
+#trsxstiqgr .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -467,7 +473,7 @@
   border-left-color: #D3D3D3;
 }
 
-#bndxghwsxe .gt_heading {
+#trsxstiqgr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -479,7 +485,7 @@
   border-right-color: #D3D3D3;
 }
 
-#bndxghwsxe .gt_title {
+#trsxstiqgr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -489,7 +495,7 @@
   border-bottom-width: 0;
 }
 
-#bndxghwsxe .gt_subtitle {
+#trsxstiqgr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -499,13 +505,13 @@
   border-top-width: 0;
 }
 
-#bndxghwsxe .gt_bottom_border {
+#trsxstiqgr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#bndxghwsxe .gt_col_headings {
+#trsxstiqgr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -520,7 +526,7 @@
   border-right-color: #D3D3D3;
 }
 
-#bndxghwsxe .gt_col_heading {
+#trsxstiqgr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -540,7 +546,7 @@
   overflow-x: hidden;
 }
 
-#bndxghwsxe .gt_column_spanner_outer {
+#trsxstiqgr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -552,15 +558,15 @@
   padding-right: 4px;
 }
 
-#bndxghwsxe .gt_column_spanner_outer:first-child {
+#trsxstiqgr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#bndxghwsxe .gt_column_spanner_outer:last-child {
+#trsxstiqgr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#bndxghwsxe .gt_column_spanner {
+#trsxstiqgr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -572,7 +578,7 @@
   width: 100%;
 }
 
-#bndxghwsxe .gt_group_heading {
+#trsxstiqgr .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -594,7 +600,7 @@
   vertical-align: middle;
 }
 
-#bndxghwsxe .gt_empty_group_heading {
+#trsxstiqgr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -609,15 +615,15 @@
   vertical-align: middle;
 }
 
-#bndxghwsxe .gt_from_md > :first-child {
+#trsxstiqgr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bndxghwsxe .gt_from_md > :last-child {
+#trsxstiqgr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bndxghwsxe .gt_row {
+#trsxstiqgr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -636,7 +642,7 @@
   overflow-x: hidden;
 }
 
-#bndxghwsxe .gt_stub {
+#trsxstiqgr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -648,7 +654,7 @@
   padding-left: 12px;
 }
 
-#bndxghwsxe .gt_summary_row {
+#trsxstiqgr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -658,7 +664,7 @@
   padding-right: 5px;
 }
 
-#bndxghwsxe .gt_first_summary_row {
+#trsxstiqgr .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -668,7 +674,7 @@
   border-top-color: #D3D3D3;
 }
 
-#bndxghwsxe .gt_grand_summary_row {
+#trsxstiqgr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -678,7 +684,7 @@
   padding-right: 5px;
 }
 
-#bndxghwsxe .gt_first_grand_summary_row {
+#trsxstiqgr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -688,11 +694,11 @@
   border-top-color: #D3D3D3;
 }
 
-#bndxghwsxe .gt_striped {
+#trsxstiqgr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#bndxghwsxe .gt_table_body {
+#trsxstiqgr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -701,7 +707,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#bndxghwsxe .gt_footnotes {
+#trsxstiqgr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -715,13 +721,13 @@
   border-right-color: #D3D3D3;
 }
 
-#bndxghwsxe .gt_footnote {
+#trsxstiqgr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#bndxghwsxe .gt_sourcenotes {
+#trsxstiqgr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -735,41 +741,41 @@
   border-right-color: #D3D3D3;
 }
 
-#bndxghwsxe .gt_sourcenote {
+#trsxstiqgr .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#bndxghwsxe .gt_left {
+#trsxstiqgr .gt_left {
   text-align: left;
 }
 
-#bndxghwsxe .gt_center {
+#trsxstiqgr .gt_center {
   text-align: center;
 }
 
-#bndxghwsxe .gt_right {
+#trsxstiqgr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bndxghwsxe .gt_font_normal {
+#trsxstiqgr .gt_font_normal {
   font-weight: normal;
 }
 
-#bndxghwsxe .gt_font_bold {
+#trsxstiqgr .gt_font_bold {
   font-weight: bold;
 }
 
-#bndxghwsxe .gt_font_italic {
+#trsxstiqgr .gt_font_italic {
   font-style: italic;
 }
 
-#bndxghwsxe .gt_super {
+#trsxstiqgr .gt_super {
   font-size: 65%;
 }
 
-#bndxghwsxe .gt_footnote_marks {
+#trsxstiqgr .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
