@@ -320,7 +320,7 @@
   <span class="op">)</span>
 
 <span class="va">model_tbl</span>
-<span class="co">#&gt; # A tibble: 6 x 2</span>
+<span class="co">#&gt; # A tibble: 6 × 2</span>
 <span class="co">#&gt;   learn_rate .models  </span>
 <span class="co">#&gt;        &lt;dbl&gt; &lt;list&gt;   </span>
 <span class="co">#&gt; 1      0.001 &lt;spec[+]&gt;</span>
@@ -406,15 +406,15 @@
 <span class="op">)</span>
 
 <span class="va">model_wfset</span>
-<span class="co">#&gt; # A workflow set/tibble: 6 x 4</span>
-<span class="co">#&gt;   wflow_id            info             option      result    </span>
-<span class="co">#&gt;   &lt;chr&gt;               &lt;list&gt;           &lt;list&gt;      &lt;list&gt;    </span>
-<span class="co">#&gt; 1 recipe_boost_tree_1 &lt;tibble [1 × 4]&gt; &lt;wrkflw__ &gt; &lt;list [0]&gt;</span>
-<span class="co">#&gt; 2 recipe_boost_tree_2 &lt;tibble [1 × 4]&gt; &lt;wrkflw__ &gt; &lt;list [0]&gt;</span>
-<span class="co">#&gt; 3 recipe_boost_tree_3 &lt;tibble [1 × 4]&gt; &lt;wrkflw__ &gt; &lt;list [0]&gt;</span>
-<span class="co">#&gt; 4 recipe_boost_tree_4 &lt;tibble [1 × 4]&gt; &lt;wrkflw__ &gt; &lt;list [0]&gt;</span>
-<span class="co">#&gt; 5 recipe_boost_tree_5 &lt;tibble [1 × 4]&gt; &lt;wrkflw__ &gt; &lt;list [0]&gt;</span>
-<span class="co">#&gt; 6 recipe_boost_tree_6 &lt;tibble [1 × 4]&gt; &lt;wrkflw__ &gt; &lt;list [0]&gt;</span></code></pre></div>
+<span class="co">#&gt; # A workflow set/tibble: 6 × 4</span>
+<span class="co">#&gt;   wflow_id            info             option    result    </span>
+<span class="co">#&gt;   &lt;chr&gt;               &lt;list&gt;           &lt;list&gt;    &lt;list&gt;    </span>
+<span class="co">#&gt; 1 recipe_boost_tree_1 &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</span>
+<span class="co">#&gt; 2 recipe_boost_tree_2 &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</span>
+<span class="co">#&gt; 3 recipe_boost_tree_3 &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</span>
+<span class="co">#&gt; 4 recipe_boost_tree_4 &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</span>
+<span class="co">#&gt; 5 recipe_boost_tree_5 &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</span>
+<span class="co">#&gt; 6 recipe_boost_tree_6 &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</span></code></pre></div>
 </div>
 <div id="parallel-training-fitting" class="section level2">
 <h2 class="hasAnchor">
@@ -471,15 +471,15 @@
     <span class="op">)</span>
   <span class="op">)</span>
 <span class="co">#&gt; Using existing parallel backend with 2 clusters (cores)...</span>
-<span class="co">#&gt;  Beginning Parallel Loop | 0.011 seconds</span>
-<span class="co">#&gt;  Finishing parallel backend. Clusters are remaining open. | 13.813 seconds</span>
+<span class="co">#&gt;  Beginning Parallel Loop | 0.03 seconds</span>
+<span class="co">#&gt;  Finishing parallel backend. Clusters are remaining open. | 18.143 seconds</span>
 <span class="co">#&gt;  Close clusters by running: `parallel_stop()`.</span>
-<span class="co">#&gt;  Total time | 13.813 seconds</span></code></pre></div>
+<span class="co">#&gt;  Total time | 18.144 seconds</span></code></pre></div>
 <p>This returns a modeltime table.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model_parallel_tbl</span>
 <span class="co">#&gt; # Modeltime Table</span>
-<span class="co">#&gt; # A tibble: 6 x 3</span>
+<span class="co">#&gt; # A tibble: 6 × 3</span>
 <span class="co">#&gt;   .model_id .model     .model_desc</span>
 <span class="co">#&gt;       &lt;int&gt; &lt;list&gt;     &lt;chr&gt;      </span>
 <span class="co">#&gt; 1         1 &lt;workflow&gt; XGBOOST    </span>
@@ -514,7 +514,7 @@
 <span class="co">#&gt; ✔ Model Successfully Fitted: 5</span>
 <span class="co">#&gt; ℹ Fitting Model: 6</span>
 <span class="co">#&gt; ✔ Model Successfully Fitted: 6</span>
-<span class="co">#&gt; Total time | 15.606 seconds</span></code></pre></div>
+<span class="co">#&gt; Total time | 19.727 seconds</span></code></pre></div>
 </div>
 </div>
 <div id="accuracy-assessment" class="section level2">
@@ -526,12 +526,12 @@
   <span class="fu"><a href="../reference/modeltime_calibrate.html">modeltime_calibrate</a></span><span class="op">(</span><span class="fu"><a href="https://rsample.tidymodels.org/reference/initial_split.html">testing</a></span><span class="op">(</span><span class="va">splits</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/modeltime_accuracy.html">modeltime_accuracy</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/table_modeltime_accuracy.html">table_modeltime_accuracy</a></span><span class="op">(</span>.interactive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<div id="zjurnjsnek" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="mjevcyyhci" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#zjurnjsnek .gt_table {
+#mjevcyyhci .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -556,7 +556,7 @@
   border-left-color: #D3D3D3;
 }
 
-#zjurnjsnek .gt_heading {
+#mjevcyyhci .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -568,7 +568,7 @@
   border-right-color: #D3D3D3;
 }
 
-#zjurnjsnek .gt_title {
+#mjevcyyhci .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -578,7 +578,7 @@
   border-bottom-width: 0;
 }
 
-#zjurnjsnek .gt_subtitle {
+#mjevcyyhci .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -588,13 +588,13 @@
   border-top-width: 0;
 }
 
-#zjurnjsnek .gt_bottom_border {
+#mjevcyyhci .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zjurnjsnek .gt_col_headings {
+#mjevcyyhci .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -609,7 +609,7 @@
   border-right-color: #D3D3D3;
 }
 
-#zjurnjsnek .gt_col_heading {
+#mjevcyyhci .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -629,7 +629,7 @@
   overflow-x: hidden;
 }
 
-#zjurnjsnek .gt_column_spanner_outer {
+#mjevcyyhci .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -641,15 +641,15 @@
   padding-right: 4px;
 }
 
-#zjurnjsnek .gt_column_spanner_outer:first-child {
+#mjevcyyhci .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zjurnjsnek .gt_column_spanner_outer:last-child {
+#mjevcyyhci .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zjurnjsnek .gt_column_spanner {
+#mjevcyyhci .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -661,7 +661,7 @@
   width: 100%;
 }
 
-#zjurnjsnek .gt_group_heading {
+#mjevcyyhci .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -683,7 +683,7 @@
   vertical-align: middle;
 }
 
-#zjurnjsnek .gt_empty_group_heading {
+#mjevcyyhci .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -698,15 +698,15 @@
   vertical-align: middle;
 }
 
-#zjurnjsnek .gt_from_md > :first-child {
+#mjevcyyhci .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zjurnjsnek .gt_from_md > :last-child {
+#mjevcyyhci .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zjurnjsnek .gt_row {
+#mjevcyyhci .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -725,7 +725,7 @@
   overflow-x: hidden;
 }
 
-#zjurnjsnek .gt_stub {
+#mjevcyyhci .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -737,7 +737,7 @@
   padding-left: 12px;
 }
 
-#zjurnjsnek .gt_summary_row {
+#mjevcyyhci .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -747,7 +747,7 @@
   padding-right: 5px;
 }
 
-#zjurnjsnek .gt_first_summary_row {
+#mjevcyyhci .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -757,7 +757,7 @@
   border-top-color: #D3D3D3;
 }
 
-#zjurnjsnek .gt_grand_summary_row {
+#mjevcyyhci .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -767,7 +767,7 @@
   padding-right: 5px;
 }
 
-#zjurnjsnek .gt_first_grand_summary_row {
+#mjevcyyhci .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -777,11 +777,11 @@
   border-top-color: #D3D3D3;
 }
 
-#zjurnjsnek .gt_striped {
+#mjevcyyhci .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zjurnjsnek .gt_table_body {
+#mjevcyyhci .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -790,7 +790,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#zjurnjsnek .gt_footnotes {
+#mjevcyyhci .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -804,13 +804,13 @@
   border-right-color: #D3D3D3;
 }
 
-#zjurnjsnek .gt_footnote {
+#mjevcyyhci .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#zjurnjsnek .gt_sourcenotes {
+#mjevcyyhci .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -824,41 +824,41 @@
   border-right-color: #D3D3D3;
 }
 
-#zjurnjsnek .gt_sourcenote {
+#mjevcyyhci .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#zjurnjsnek .gt_left {
+#mjevcyyhci .gt_left {
   text-align: left;
 }
 
-#zjurnjsnek .gt_center {
+#mjevcyyhci .gt_center {
   text-align: center;
 }
 
-#zjurnjsnek .gt_right {
+#mjevcyyhci .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zjurnjsnek .gt_font_normal {
+#mjevcyyhci .gt_font_normal {
   font-weight: normal;
 }
 
-#zjurnjsnek .gt_font_bold {
+#mjevcyyhci .gt_font_bold {
   font-weight: bold;
 }
 
-#zjurnjsnek .gt_font_italic {
+#mjevcyyhci .gt_font_italic {
   font-style: italic;
 }
 
-#zjurnjsnek .gt_super {
+#mjevcyyhci .gt_super {
   font-size: 65%;
 }
 
-#zjurnjsnek .gt_footnote_marks {
+#mjevcyyhci .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
