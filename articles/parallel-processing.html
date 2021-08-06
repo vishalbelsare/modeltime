@@ -471,23 +471,23 @@
     <span class="op">)</span>
   <span class="op">)</span>
 <span class="co">#&gt; Using existing parallel backend with 2 clusters (cores)...</span>
-<span class="co">#&gt;  Beginning Parallel Loop | 0.025 seconds</span>
-<span class="co">#&gt;  Finishing parallel backend. Clusters are remaining open. | 13.703 seconds</span>
+<span class="co">#&gt;  Beginning Parallel Loop | 0.01 seconds</span>
+<span class="co">#&gt;  Finishing parallel backend. Clusters are remaining open. | 13.678 seconds</span>
 <span class="co">#&gt;  Close clusters by running: `parallel_stop()`.</span>
-<span class="co">#&gt;  Total time | 13.704 seconds</span></code></pre></div>
+<span class="co">#&gt;  Total time | 13.679 seconds</span></code></pre></div>
 <p>This returns a modeltime table.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model_parallel_tbl</span>
 <span class="co">#&gt; # Modeltime Table</span>
 <span class="co">#&gt; # A tibble: 6 × 3</span>
-<span class="co">#&gt;   .model_id .model     .model_desc</span>
-<span class="co">#&gt;       &lt;int&gt; &lt;list&gt;     &lt;chr&gt;      </span>
-<span class="co">#&gt; 1         1 &lt;workflow&gt; XGBOOST    </span>
-<span class="co">#&gt; 2         2 &lt;workflow&gt; XGBOOST    </span>
-<span class="co">#&gt; 3         3 &lt;workflow&gt; XGBOOST    </span>
-<span class="co">#&gt; 4         4 &lt;workflow&gt; XGBOOST    </span>
-<span class="co">#&gt; 5         5 &lt;workflow&gt; XGBOOST    </span>
-<span class="co">#&gt; 6         6 &lt;workflow&gt; XGBOOST</span></code></pre></div>
+<span class="co">#&gt;   .model_id .model     .model_desc        </span>
+<span class="co">#&gt;       &lt;int&gt; &lt;list&gt;     &lt;chr&gt;              </span>
+<span class="co">#&gt; 1         1 &lt;workflow&gt; RECIPE_BOOST_TREE_1</span>
+<span class="co">#&gt; 2         2 &lt;workflow&gt; RECIPE_BOOST_TREE_2</span>
+<span class="co">#&gt; 3         3 &lt;workflow&gt; RECIPE_BOOST_TREE_3</span>
+<span class="co">#&gt; 4         4 &lt;workflow&gt; RECIPE_BOOST_TREE_4</span>
+<span class="co">#&gt; 5         5 &lt;workflow&gt; RECIPE_BOOST_TREE_5</span>
+<span class="co">#&gt; 6         6 &lt;workflow&gt; RECIPE_BOOST_TREE_6</span></code></pre></div>
 </div>
 <div id="comparison-to-sequential-backend" class="section level3">
 <h3 class="hasAnchor">
@@ -514,7 +514,7 @@
 <span class="co">#&gt; ✔ Model Successfully Fitted: 5</span>
 <span class="co">#&gt; ℹ Fitting Model: 6</span>
 <span class="co">#&gt; ✔ Model Successfully Fitted: 6</span>
-<span class="co">#&gt; Total time | 15.437 seconds</span></code></pre></div>
+<span class="co">#&gt; Total time | 15.534 seconds</span></code></pre></div>
 </div>
 </div>
 <div id="accuracy-assessment" class="section level2">
@@ -526,12 +526,12 @@
   <span class="fu"><a href="../reference/modeltime_calibrate.html">modeltime_calibrate</a></span><span class="op">(</span><span class="fu"><a href="https://rsample.tidymodels.org/reference/initial_split.html">testing</a></span><span class="op">(</span><span class="va">splits</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/modeltime_accuracy.html">modeltime_accuracy</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/table_modeltime_accuracy.html">table_modeltime_accuracy</a></span><span class="op">(</span>.interactive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<div id="jxkqgpvhqw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ucohsqzysr" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#jxkqgpvhqw .gt_table {
+#ucohsqzysr .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -556,7 +556,7 @@
   border-left-color: #D3D3D3;
 }
 
-#jxkqgpvhqw .gt_heading {
+#ucohsqzysr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -568,7 +568,7 @@
   border-right-color: #D3D3D3;
 }
 
-#jxkqgpvhqw .gt_title {
+#ucohsqzysr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -578,7 +578,7 @@
   border-bottom-width: 0;
 }
 
-#jxkqgpvhqw .gt_subtitle {
+#ucohsqzysr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -588,13 +588,13 @@
   border-top-width: 0;
 }
 
-#jxkqgpvhqw .gt_bottom_border {
+#ucohsqzysr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jxkqgpvhqw .gt_col_headings {
+#ucohsqzysr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -609,7 +609,7 @@
   border-right-color: #D3D3D3;
 }
 
-#jxkqgpvhqw .gt_col_heading {
+#ucohsqzysr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -629,7 +629,7 @@
   overflow-x: hidden;
 }
 
-#jxkqgpvhqw .gt_column_spanner_outer {
+#ucohsqzysr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -641,15 +641,15 @@
   padding-right: 4px;
 }
 
-#jxkqgpvhqw .gt_column_spanner_outer:first-child {
+#ucohsqzysr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jxkqgpvhqw .gt_column_spanner_outer:last-child {
+#ucohsqzysr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jxkqgpvhqw .gt_column_spanner {
+#ucohsqzysr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -661,7 +661,7 @@
   width: 100%;
 }
 
-#jxkqgpvhqw .gt_group_heading {
+#ucohsqzysr .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -683,7 +683,7 @@
   vertical-align: middle;
 }
 
-#jxkqgpvhqw .gt_empty_group_heading {
+#ucohsqzysr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -698,15 +698,15 @@
   vertical-align: middle;
 }
 
-#jxkqgpvhqw .gt_from_md > :first-child {
+#ucohsqzysr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jxkqgpvhqw .gt_from_md > :last-child {
+#ucohsqzysr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jxkqgpvhqw .gt_row {
+#ucohsqzysr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -725,7 +725,7 @@
   overflow-x: hidden;
 }
 
-#jxkqgpvhqw .gt_stub {
+#ucohsqzysr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -737,7 +737,7 @@
   padding-left: 12px;
 }
 
-#jxkqgpvhqw .gt_summary_row {
+#ucohsqzysr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -747,7 +747,7 @@
   padding-right: 5px;
 }
 
-#jxkqgpvhqw .gt_first_summary_row {
+#ucohsqzysr .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -757,7 +757,7 @@
   border-top-color: #D3D3D3;
 }
 
-#jxkqgpvhqw .gt_grand_summary_row {
+#ucohsqzysr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -767,7 +767,7 @@
   padding-right: 5px;
 }
 
-#jxkqgpvhqw .gt_first_grand_summary_row {
+#ucohsqzysr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -777,11 +777,11 @@
   border-top-color: #D3D3D3;
 }
 
-#jxkqgpvhqw .gt_striped {
+#ucohsqzysr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jxkqgpvhqw .gt_table_body {
+#ucohsqzysr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -790,7 +790,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#jxkqgpvhqw .gt_footnotes {
+#ucohsqzysr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -804,13 +804,13 @@
   border-right-color: #D3D3D3;
 }
 
-#jxkqgpvhqw .gt_footnote {
+#ucohsqzysr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#jxkqgpvhqw .gt_sourcenotes {
+#ucohsqzysr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -824,41 +824,41 @@
   border-right-color: #D3D3D3;
 }
 
-#jxkqgpvhqw .gt_sourcenote {
+#ucohsqzysr .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#jxkqgpvhqw .gt_left {
+#ucohsqzysr .gt_left {
   text-align: left;
 }
 
-#jxkqgpvhqw .gt_center {
+#ucohsqzysr .gt_center {
   text-align: center;
 }
 
-#jxkqgpvhqw .gt_right {
+#ucohsqzysr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jxkqgpvhqw .gt_font_normal {
+#ucohsqzysr .gt_font_normal {
   font-weight: normal;
 }
 
-#jxkqgpvhqw .gt_font_bold {
+#ucohsqzysr .gt_font_bold {
   font-weight: bold;
 }
 
-#jxkqgpvhqw .gt_font_italic {
+#ucohsqzysr .gt_font_italic {
   font-style: italic;
 }
 
-#jxkqgpvhqw .gt_super {
+#ucohsqzysr .gt_super {
   font-size: 65%;
 }
 
-#jxkqgpvhqw .gt_footnote_marks {
+#ucohsqzysr .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -882,7 +882,7 @@
 <tbody class="gt_table_body">
 <tr>
 <td class="gt_row gt_right">1</td>
-<td class="gt_row gt_left">XGBOOST</td>
+<td class="gt_row gt_left">RECIPE_BOOST_TREE_1</td>
 <td class="gt_row gt_left">Test</td>
 <td class="gt_row gt_right">55572.50</td>
 <td class="gt_row gt_right">98.52</td>
@@ -893,7 +893,7 @@
 </tr>
 <tr>
 <td class="gt_row gt_right">2</td>
-<td class="gt_row gt_left">XGBOOST</td>
+<td class="gt_row gt_left">RECIPE_BOOST_TREE_2</td>
 <td class="gt_row gt_left">Test</td>
 <td class="gt_row gt_right">48819.23</td>
 <td class="gt_row gt_right">86.15</td>
@@ -904,7 +904,7 @@
 </tr>
 <tr>
 <td class="gt_row gt_right">3</td>
-<td class="gt_row gt_left">XGBOOST</td>
+<td class="gt_row gt_left">RECIPE_BOOST_TREE_3</td>
 <td class="gt_row gt_left">Test</td>
 <td class="gt_row gt_right">13286.28</td>
 <td class="gt_row gt_right">21.41</td>
@@ -915,7 +915,7 @@
 </tr>
 <tr>
 <td class="gt_row gt_right">4</td>
-<td class="gt_row gt_left">XGBOOST</td>
+<td class="gt_row gt_left">RECIPE_BOOST_TREE_4</td>
 <td class="gt_row gt_left">Test</td>
 <td class="gt_row gt_right">3802.13</td>
 <td class="gt_row gt_right">8.11</td>
@@ -926,7 +926,7 @@
 </tr>
 <tr>
 <td class="gt_row gt_right">5</td>
-<td class="gt_row gt_left">XGBOOST</td>
+<td class="gt_row gt_left">RECIPE_BOOST_TREE_5</td>
 <td class="gt_row gt_left">Test</td>
 <td class="gt_row gt_right">3361.45</td>
 <td class="gt_row gt_right">7.01</td>
@@ -937,7 +937,7 @@
 </tr>
 <tr>
 <td class="gt_row gt_right">6</td>
-<td class="gt_row gt_left">XGBOOST</td>
+<td class="gt_row gt_left">RECIPE_BOOST_TREE_6</td>
 <td class="gt_row gt_left">Test</td>
 <td class="gt_row gt_right">3645.01</td>
 <td class="gt_row gt_right">8.76</td>
