@@ -19,12 +19,12 @@ adam_fit_impl(
   regressors = c("use", "select", "adapt"),
   outliers = c("ignore", "use", "select"),
   level = 0.99,
-  occurrence = c("none", "auto", "fixed", "general", "odds-ratio",
-    "inverse-odds-ratio", "direct"),
-  distribution = c("default", "dnorm", "dlaplace", "ds", "dgnorm", "dlnorm",
-    "dinvgauss", "dgamma"),
-  loss = c("likelihood", "MSE", "MAE", "HAM", "LASSO", "RIDGE", "MSEh", "TMSE",
-    "GTMSE", "MSCE"),
+  occurrence = c("none", "auto", "fixed", "general", "odds-ratio", "inverse-odds-ratio",
+    "direct"),
+  distribution = c("default", "dnorm", "dlaplace", "ds", "dgnorm", "dlnorm", "dinvgauss",
+    "dgamma"),
+  loss = c("likelihood", "MSE", "MAE", "HAM", "LASSO", "RIDGE", "MSEh", "TMSE", "GTMSE",
+    "MSCE"),
   ic = c("AICc", "AIC", "BIC", "BICc"),
   select_order = FALSE,
   ...
@@ -77,3 +77,4 @@ specify the maximum orders to check in this case}
 \description{
 Low-Level ADAM function for translating modeltime to forecast
 }
+\keyword{internal}

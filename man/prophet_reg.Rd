@@ -130,13 +130,15 @@ Other options can be set using \code{set_engine()}.
 
 The engine uses \code{\link[prophet:prophet]{prophet::prophet()}}.
 
-Function Parameters:\preformatted{## function (df = NULL, growth = "linear", changepoints = NULL, n.changepoints = 25, 
-##     changepoint.range = 0.8, yearly.seasonality = "auto", weekly.seasonality = "auto", 
-##     daily.seasonality = "auto", holidays = NULL, seasonality.mode = "additive", 
-##     seasonality.prior.scale = 10, holidays.prior.scale = 10, changepoint.prior.scale = 0.05, 
-##     mcmc.samples = 0, interval.width = 0.8, uncertainty.samples = 1000, 
-##     fit = TRUE, ...)
-}
+Function Parameters:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{#> function (df = NULL, growth = "linear", changepoints = NULL, n.changepoints = 25, 
+#>     changepoint.range = 0.8, yearly.seasonality = "auto", weekly.seasonality = "auto", 
+#>     daily.seasonality = "auto", holidays = NULL, seasonality.mode = "additive", 
+#>     seasonality.prior.scale = 10, holidays.prior.scale = 10, changepoint.prior.scale = 0.05, 
+#>     mcmc.samples = 0, interval.width = 0.8, uncertainty.samples = 1000, 
+#>     fit = TRUE, ...)
+}\if{html}{\out{</div>}}
 
 Parameter Notes:
 \itemize{
@@ -224,7 +226,6 @@ library(dplyr)
 library(parsnip)
 library(rsample)
 library(timetk)
-library(modeltime)
 
 # Data
 m750 <- m4_monthly \%>\% filter(id == "M750")
@@ -247,5 +248,5 @@ model_fit
 
 }
 \seealso{
-\code{\link[=fit.model_spec]{fit.model_spec()}}, \code{\link[=set_engine]{set_engine()}}
+\code{fit.model_spec()}, \code{set_engine()}
 }

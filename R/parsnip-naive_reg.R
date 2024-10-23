@@ -93,14 +93,13 @@
 #' These models are univariate. No xregs are used in the modeling process.
 #'
 #'
-#' @seealso [fit.model_spec()], [set_engine()]
+#' @seealso `fit.model_spec()`, `set_engine()`
 #'
 #' @examples
 #' library(dplyr)
 #' library(parsnip)
 #' library(rsample)
 #' library(timetk)
-#' library(modeltime)
 #'
 #' # Data
 #' m750 <- m4_monthly %>% filter(id == "M750")
@@ -176,7 +175,7 @@ update.naive_reg <- function(object, parameters = NULL,
                              id = NULL, seasonal_period = NULL,
                              fresh = FALSE, ...) {
 
-    parsnip::update_dot_check(...)
+    eng_args <- parsnip::update_engine_parameters(object$eng_args, fresh, ...)
 
     if (!is.null(parameters)) {
         parameters <- parsnip::check_final_param(parameters)
@@ -191,12 +190,15 @@ update.naive_reg <- function(object, parameters = NULL,
 
     if (fresh) {
         object$args <- args
+        object$eng_args <- eng_args
     } else {
         null_args <- purrr::map_lgl(args, parsnip::null_value)
         if (any(null_args))
             args <- args[!null_args]
         if (length(args) > 0)
             object$args[names(args)] <- args
+        if (length(eng_args) > 0)
+            object$eng_args[names(eng_args)] <- eng_args
     }
 
     parsnip::new_model_spec(
@@ -233,6 +235,7 @@ translate.naive_reg <- function(x, engine = x$engine, ...) {
 #' @param seasonal_period Not used for NAIVE forecast but here for consistency with SNAIVE
 #' @param ... Not currently used
 #'
+#' @keywords internal
 #' @export
 naive_fit_impl <- function(x, y, id = NULL, seasonal_period = "auto", ...) {
 
@@ -266,12 +269,12 @@ naive_fit_impl <- function(x, y, id = NULL, seasonal_period = "auto", ...) {
     if (is_grouped) {
         naive_model <- constructed_tbl %>%
             dplyr::group_by(!! rlang::sym(id)) %>%
-            dplyr::arrange(dplyr::all_of(idx_col)) %>%
+            dplyr::arrange(dplyr::pick(dplyr::all_of(idx_col))) %>%
             dplyr::slice_tail(n = 1) %>%
             dplyr::ungroup()
     } else {
         naive_model <- constructed_tbl %>%
-            dplyr::arrange(dplyr::all_of(idx_col)) %>%
+            dplyr::arrange(dplyr::pick(dplyr::all_of(idx_col))) %>%
             dplyr::slice_tail(n = 1) %>%
             dplyr::ungroup()
     }
@@ -331,6 +334,7 @@ print.naive_fit_impl <- function(x, ...) {
 #'
 #' @inheritParams parsnip::predict.model_fit
 #'
+#' @keywords internal
 #' @export
 naive_predict_impl <- function(object, new_data) {
 
@@ -373,6 +377,7 @@ predict.naive_fit_impl <- function(object, new_data, ...) {
 #' @param seasonal_period The seasonal period to forecast into the future
 #' @param ... Not currently used
 #'
+#' @keywords internal
 #' @export
 snaive_fit_impl <- function(x, y, id = NULL, seasonal_period = "auto", ...) {
 
@@ -406,12 +411,12 @@ snaive_fit_impl <- function(x, y, id = NULL, seasonal_period = "auto", ...) {
     if (is_grouped) {
         snaive_model <- constructed_tbl %>%
             dplyr::group_by(!! rlang::sym(id)) %>%
-            dplyr::arrange(dplyr::all_of(idx_col)) %>%
+            dplyr::arrange(dplyr::pick(dplyr::all_of(idx_col))) %>%
             dplyr::slice_tail(n = period) %>%
             dplyr::ungroup()
     } else {
         snaive_model <- constructed_tbl %>%
-            dplyr::arrange(dplyr::all_of(idx_col)) %>%
+            dplyr::arrange(dplyr::pick(dplyr::all_of(idx_col))) %>%
             dplyr::slice_tail(n = period) %>%
             dplyr::ungroup()
     }
@@ -472,6 +477,7 @@ print.snaive_fit_impl <- function(x, ...) {
 #'
 #' @inheritParams parsnip::predict.model_fit
 #'
+#' @keywords internal
 #' @export
 snaive_predict_impl <- function(object, new_data) {
 

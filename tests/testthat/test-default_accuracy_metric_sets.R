@@ -1,11 +1,12 @@
 
-library(testthat)
 library(tidymodels)
 library(tibble)
 library(dplyr)
 library(timetk)
 
 test_that("default_forecast_accuracy_metric_set works", {
+
+    skip_on_cran()
 
     set.seed(1)
     data <- tibble(
@@ -15,7 +16,7 @@ test_that("default_forecast_accuracy_metric_set works", {
     )
 
     # Create a metric summarizer function from the metric set
-    calc_default_metrics <- default_forecast_accuracy_metric_set(mae)
+    calc_default_metrics <- default_forecast_accuracy_metric_set(yardstick::mae)
 
     # Apply the metric summarizer to new data
     ret <- calc_default_metrics(data, y, y_hat)
@@ -24,6 +25,8 @@ test_that("default_forecast_accuracy_metric_set works", {
 })
 
 test_that("summarize_accuracy_metrics works", {
+
+    skip_on_cran()
 
     predictions_tbl <- tibble(
         group = c(rep("model_1", 4),
@@ -49,7 +52,7 @@ test_that("summarize_accuracy_metrics works", {
         summarize_accuracy_metrics(
             truth, estimate,
             metric_set = default_forecast_accuracy_metric_set(
-                mae
+                yardstick::mae
             )
         )
 

@@ -114,7 +114,7 @@
 #' The engine uses [smooth::es()].
 #'
 #' Function Parameters:
-#' ```{r echo = FALSE}
+#' ```{r echo = FALSE, eval = rlang::is_installed("smooth")}
 #' str(smooth::es)
 #' ```
 #' The main arguments `model` and `phi` are defined using:
@@ -186,14 +186,13 @@
 #'  Note that date or date-time class values are excluded from `xreg`.
 #'
 #'
-#' @seealso [fit.model_spec()], [set_engine()]
+#' @seealso `fit.model_spec()`, `set_engine()`
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("smooth")
 #' library(dplyr)
 #' library(parsnip)
 #' library(rsample)
 #' library(timetk)
-#' library(modeltime)
 #' library(smooth)
 #'
 #' # Data
@@ -330,7 +329,7 @@ update.exp_smoothing <- function(object, parameters = NULL,
                                  smooth_level = NULL, smooth_trend = NULL, smooth_seasonal = NULL,
                                  fresh = FALSE, ...) {
 
-    parsnip::update_dot_check(...)
+    eng_args <- parsnip::update_engine_parameters(object$eng_args, fresh, ...)
 
     if (!is.null(parameters)) {
         parameters <- parsnip::check_final_param(parameters)
@@ -351,12 +350,15 @@ update.exp_smoothing <- function(object, parameters = NULL,
 
     if (fresh) {
         object$args <- args
+        object$eng_args <- eng_args
     } else {
         null_args <- purrr::map_lgl(args, parsnip::null_value)
         if (any(null_args))
             args <- args[!null_args]
         if (length(args) > 0)
             object$args[names(args)] <- args
+        if (length(eng_args) > 0)
+            object$eng_args[names(eng_args)] <- eng_args
     }
 
     parsnip::new_model_spec(
@@ -395,6 +397,7 @@ translate.exp_smoothing <- function(x, engine = x$engine, ...) {
 #'  of "auto" or time-based phrase of "2 weeks" can be used if a date or date-time variable is provided.
 #' @param ... Additional arguments passed to `forecast::ets`
 #'
+#' @keywords internal
 #' @export
 ets_fit_impl <- function(x, y, period = "auto",
                          error = "auto", trend = "auto",
@@ -514,6 +517,7 @@ predict.ets_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `forecast::ets()`
 #'
+#' @keywords internal
 #' @export
 ets_predict_impl <- function(object, new_data, ...) {
 
@@ -547,6 +551,7 @@ ets_predict_impl <- function(object, new_data, ...) {
 #'  of "auto" or time-based phrase of "2 weeks" can be used if a date or date-time variable is provided.
 #' @param ... Additional arguments passed to `smooth::es`
 #'
+#' @keywords internal
 #' @export
 smooth_fit_impl <- function(x, y, period = "auto",
                          error = "auto", trend = "auto",
@@ -655,7 +660,7 @@ smooth_fit_impl <- function(x, y, period = "auto",
         # Data - Date column (matches original), .actual, .fitted, and .residuals columns
         data = tibble::tibble(
             !! idx_col  := idx,
-            .actual      =  as.numeric(fit_ets$y),
+            .actual      =  greybox::actuals(fit_ets) %>% as.numeric(),
             .fitted      =  as.numeric(fit_ets$fitted),
             .residuals   =  as.numeric(fit_ets$residuals)
         ),
@@ -688,6 +693,7 @@ predict.smooth_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `smooth::es()`
 #'
+#' @keywords internal
 #' @export
 smooth_predict_impl <- function(object, new_data, ...) {
 
@@ -720,6 +726,7 @@ smooth_predict_impl <- function(object, new_data, ...) {
 #' @param y A numeric vector of values to fit
 #' @param ... Additional arguments passed to `forecast::ets`
 #'
+#' @keywords internal
 #' @export
 croston_fit_impl <- function(x, y, alpha = 0.1, ...){
 
@@ -774,6 +781,7 @@ predict.croston_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `stats::predict()`
 #'
+#' @keywords internal
 #' @export
 croston_predict_impl <- function(object, new_data, ...) {
     # PREPARE INPUTS
@@ -809,6 +817,7 @@ croston_predict_impl <- function(object, new_data, ...) {
 #' @param y A numeric vector of values to fit
 #' @param ... Additional arguments passed to `forecast::ets`
 #'
+#' @keywords internal
 #' @export
 theta_fit_impl <- function(x, y, ...){
 
@@ -863,6 +872,7 @@ predict.theta_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `stats::predict()`
 #'
+#' @keywords internal
 #' @export
 theta_predict_impl <- function(object, new_data, ...) {
     # PREPARE INPUTS

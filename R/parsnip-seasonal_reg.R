@@ -133,14 +133,13 @@
 #'
 #'
 #'
-#' @seealso [fit.model_spec()], [set_engine()]
+#' @seealso `fit.model_spec()`, `set_engine()`
 #'
 #' @examples
 #' library(dplyr)
 #' library(parsnip)
 #' library(rsample)
 #' library(timetk)
-#' library(modeltime)
 #'
 #' # Data
 #' taylor_30_min
@@ -211,7 +210,7 @@ update.seasonal_reg <- function(object, parameters = NULL,
                                 seasonal_period_1 = NULL, seasonal_period_2 = NULL, seasonal_period_3 = NULL,
                                 fresh = FALSE, ...) {
 
-    parsnip::update_dot_check(...)
+    eng_args <- parsnip::update_engine_parameters(object$eng_args, fresh, ...)
 
     if (!is.null(parameters)) {
         parameters <- parsnip::check_final_param(parameters)
@@ -227,12 +226,15 @@ update.seasonal_reg <- function(object, parameters = NULL,
 
     if (fresh) {
         object$args <- args
+        object$eng_args <- eng_args
     } else {
         null_args <- purrr::map_lgl(args, parsnip::null_value)
         if (any(null_args))
             args <- args[!null_args]
         if (length(args) > 0)
             object$args[names(args)] <- args
+        if (length(eng_args) > 0)
+            object$eng_args[names(eng_args)] <- eng_args
     }
 
     parsnip::new_model_spec(
@@ -273,6 +275,7 @@ translate.seasonal_reg <- function(x, engine = x$engine, ...) {
 #' @param use.parallel `TRUE/FALSE` indicates whether or not to use parallel processing.
 #' @param ... Additional arguments passed to `forecast::tbats()`
 #'
+#' @keywords internal
 #' @export
 tbats_fit_impl <- function(x, y, period_1 = "auto", period_2 = NULL, period_3 = NULL, use.parallel = length(y) > 1000, ...) {
 
@@ -283,7 +286,7 @@ tbats_fit_impl <- function(x, y, period_1 = "auto", period_2 = NULL, period_3 = 
     predictor  <- x
 
     if (is.null(period_1) || period_1 == "none" || period_1 <=1) {
-        glubort("The 'seasonal_period_1' must be greater than 1 (i.e. have seasonality). Try increasing the seasonality.")
+        cli::cli_abort("The 'seasonal_period_1' must be greater than 1 (i.e. have seasonality). Try increasing the seasonality.")
     }
 
     # INDEX & PERIOD
@@ -359,6 +362,7 @@ predict.tbats_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `forecast::forecast()`
 #'
+#' @keywords internal
 #' @export
 tbats_predict_impl <- function(object, new_data, ...) {
 
@@ -396,6 +400,7 @@ tbats_predict_impl <- function(object, new_data, ...) {
 #'  of "auto" or time-based phrase of "2 weeks" can be used if a date or date-time variable is provided.
 #' @param ... Additional arguments passed to `forecast::stlm()`
 #'
+#' @keywords internal
 #' @export
 stlm_ets_fit_impl <- function(x, y, period_1 = "auto", period_2 = NULL, period_3 = NULL, ...) {
 
@@ -406,7 +411,7 @@ stlm_ets_fit_impl <- function(x, y, period_1 = "auto", period_2 = NULL, period_3
     predictor  <- x
 
     if (is.null(period_1) || period_1 == "none" || period_1 <=1) {
-        glubort("The 'seasonal_period_1' must be greater than 1 (i.e. have seasonality). Try increasing the seasonality.")
+        cli::cli_abort("The 'seasonal_period_1' must be greater than 1 (i.e. have seasonality). Try increasing the seasonality.")
     }
 
     # INDEX & PERIOD
@@ -494,6 +499,7 @@ predict.stlm_ets_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `forecast::forecast()`
 #'
+#' @keywords internal
 #' @export
 stlm_ets_predict_impl <- function(object, new_data, ...) {
 
@@ -531,6 +537,7 @@ stlm_ets_predict_impl <- function(object, new_data, ...) {
 #'  of "auto" or time-based phrase of "2 weeks" can be used if a date or date-time variable is provided.
 #' @param ... Additional arguments passed to `forecast::stlm()`
 #'
+#' @keywords internal
 #' @export
 stlm_arima_fit_impl <- function(x, y, period_1 = "auto", period_2 = NULL, period_3 = NULL, ...) {
 
@@ -541,7 +548,7 @@ stlm_arima_fit_impl <- function(x, y, period_1 = "auto", period_2 = NULL, period
     predictor  <- x
 
     if (is.null(period_1) || period_1 == "none" || period_1 <=1) {
-        glubort("The 'seasonal_period_1' must be greater than 1 (i.e. have seasonality). Try increasing the seasonality.")
+        cli::cli_abort("The 'seasonal_period_1' must be greater than 1 (i.e. have seasonality). Try increasing the seasonality.")
     }
 
     # INDEX & PERIOD
@@ -634,6 +641,7 @@ predict.stlm_arima_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `forecast::forecast()`
 #'
+#' @keywords internal
 #' @export
 stlm_arima_predict_impl <- function(object, new_data, ...) {
 

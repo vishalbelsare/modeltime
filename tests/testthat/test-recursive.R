@@ -1,42 +1,45 @@
 context("RECURSIVE MODELS")
 
-FORECAST_HORIZON <- 24
 
-m750_extended <- m750 %>%
-  group_by(id) %>%
-  future_frame(
-    .length_out = FORECAST_HORIZON,
-    .bind_data  = TRUE
-  ) %>%
-  ungroup()
 
 # SINGLE / RECIPE / PARSNIP ----
 
-test_that("recursive 1 - single / recipe / parsnip", {
+test_that("Recursive Tests ", {
 
   skip_on_cran()
 
+  FORECAST_HORIZON <- 24
+
+  m750_extended <- m750 %>%
+    group_by(id) %>%
+    future_frame(
+      .length_out = FORECAST_HORIZON,
+      .bind_data  = TRUE
+    ) %>%
+    ungroup()
+
+  # recursive 1 - single / recipe / parsnip ----
+
   # Lag Recipe
-  recipe_lag <- recipe(value ~ date, m750_extended) %>%
+  recipe_lag <- recipes::recipe(value ~ date, m750_extended) %>%
     step_lag(value, lag = 1:FORECAST_HORIZON)
 
   # Data Transformation
   m750_lagged <- recipe_lag %>% prep() %>% juice()
 
-  train_data <- m750_lagged %>%
-    drop_na()
+  train_data <- tidyr::drop_na(m750_lagged)
 
   future_data <- m750_lagged %>%
-    filter(is.na(value))
+    dplyr::filter(is.na(value))
 
 
   # * Recursive Modeling ----
   model_fit_lm <- linear_reg() %>%
-    set_engine("lm") %>%
+    parsnip::set_engine("lm") %>%
     fit(value ~ date, data = train_data)
 
   model_fit_lm_recursive <- linear_reg() %>%
-    set_engine("lm") %>%
+    parsnip::set_engine("lm") %>%
     fit(value ~ ., data = train_data) %>%
     recursive(
       transform  = recipe_lag,
@@ -59,7 +62,7 @@ test_that("recursive 1 - single / recipe / parsnip", {
   # Visualize
   # forecast_tbl %>% plot_modeltime_forecast()
 
-  preds <- forecast_tbl %>% filter(.model_id == 2) %>% pull(.value)
+  preds <- forecast_tbl %>% dplyr::filter(.model_id == 2) %>% dplyr::pull(.value)
   expect_equal(
     length(future_data$value),
     length(preds)
@@ -88,7 +91,7 @@ test_that("recursive 1 - single / recipe / parsnip", {
 
   # forecast_refit_tbl %>% plot_modeltime_forecast()
 
-  preds <- forecast_refit_tbl %>% filter(.model_id == 1) %>% pull(.value)
+  preds <- forecast_refit_tbl %>% dplyr::filter(.model_id == 1) %>% dplyr::pull(.value)
   expect_equal(
     length(future_tbl$value),
     length(preds)
@@ -97,11 +100,12 @@ test_that("recursive 1 - single / recipe / parsnip", {
   expect_lt(max(preds), 10600)
   expect_gt(min(preds), 8800)
 
-})
 
-# SINGLE / TRANSFORM FUNCTION / WORKFLOW ----
 
-test_that("recursive 2 - single / transform func / workflow", {
+  # SINGLE / TRANSFORM FUNCTION / WORKFLOW ----
+
+
+  # recursive 2 - single / transform func / workflow -----
 
   # Function run recursively that updates the forcasted dataset
   lag_transformer <- function(data){
@@ -113,23 +117,22 @@ test_that("recursive 2 - single / transform func / workflow", {
   # Data Preparation
   m750_lagged <- m750_extended %>%
     lag_transformer() %>%
-    select(-id)
+    dplyr::select(-id)
 
-  train_data <- m750_lagged %>%
-    drop_na()
+  train_data <- tidyr::drop_na(m750_lagged)
 
   future_data <- m750_lagged %>%
-    filter(is.na(value))
+    dplyr::filter(is.na(value))
 
   # * Recursive Modeling ----
-  wflw_fit_lm <- workflow() %>%
-    add_recipe(recipe(value ~ date, train_data)) %>%
-    add_model(linear_reg() %>% set_engine("lm")) %>%
+  wflw_fit_lm <- workflows::workflow() %>%
+    workflows::add_recipe(recipes::recipe(value ~ date, train_data)) %>%
+    workflows::add_model(linear_reg() %>% parsnip::set_engine("lm")) %>%
     fit(train_data)
 
-  wflw_fit_lm_recursive <- workflow() %>%
-    add_recipe(recipe(value ~ ., train_data)) %>%
-    add_model(linear_reg() %>% set_engine("lm")) %>%
+  wflw_fit_lm_recursive <- workflows::workflow() %>%
+    workflows::add_recipe(recipes::recipe(value ~ ., train_data)) %>%
+    workflows::add_model(linear_reg() %>% parsnip::set_engine("lm")) %>%
     fit(train_data) %>%
     recursive(
       transform  = lag_transformer,
@@ -151,7 +154,7 @@ test_that("recursive 2 - single / transform func / workflow", {
 
   # forecast_tbl %>% plot_modeltime_forecast()
 
-  preds <- forecast_tbl %>% filter(.model_id == 2) %>% pull(.value)
+  preds <- forecast_tbl %>% dplyr::filter(.model_id == 2) %>% dplyr::pull(.value)
   expect_equal(
     length(future_data$value),
     length(preds)
@@ -182,7 +185,7 @@ test_that("recursive 2 - single / transform func / workflow", {
 
   # forecast_refit_tbl %>% plot_modeltime_forecast()
 
-  preds <- forecast_refit_tbl %>% filter(.model_id == 1) %>% pull(.value)
+  preds <- forecast_refit_tbl %>% dplyr::filter(.model_id == 1) %>% dplyr::pull(.value)
   expect_equal(
     length(future_tbl$value),
     length(preds)
@@ -191,47 +194,45 @@ test_that("recursive 2 - single / transform func / workflow", {
   expect_lt(max(preds), 10600)
   expect_gt(min(preds), 8800)
 
-})
 
-# PANEL / FUNCTION / PARSNIP & WORKFLOW ----
+  # PANEL / FUNCTION / PARSNIP & WORKFLOW ----
 
-test_that("recursive 3 - panel / function / parsnip + workflow", {
+  # recursive 3 - panel / function / parsnip + workflow
 
   # Jumble the data to make sure it forecasts properly
-  m4_monthly_updated <- m4_monthly %>%
-    arrange(desc(id), date) %>%
-    mutate(id = as_factor(as.character(id)))
+  m4_monthly_updated <- timetk::m4_monthly %>%
+    dplyr::arrange(desc(id), date) %>%
+    dplyr::mutate(id = forcats::as_factor(as.character(id)))
 
   m4_extended <- m4_monthly_updated %>%
-    group_by(id) %>%
-    future_frame(
+    dplyr::group_by(id) %>%
+    timetk::future_frame(
       .length_out = FORECAST_HORIZON,
       .bind_data  = TRUE
     ) %>%
-    ungroup()
+    dplyr::ungroup()
 
   # Transformation Function
   lag_transformer_grouped <- function(data){
     data %>%
-      group_by(id) %>%
+      dplyr::group_by(id) %>%
       # Lags
-      tk_augment_lags(value, .lags = 1:FORECAST_HORIZON) %>%
-      ungroup()
+      timetk::tk_augment_lags(value, .lags = 1:FORECAST_HORIZON) %>%
+      dplyr::ungroup()
   }
 
   m4_lags <- m4_extended %>%
     lag_transformer_grouped()
 
-  train_data <- m4_lags %>%
-    drop_na()
+  train_data <- drop_na(m4_lags)
 
   future_data <- m4_lags %>%
-    filter(is.na(value))
+    dplyr::filter(is.na(value))
 
   # * Recursive Modeling ----
 
   model_fit_lm_recursive <- linear_reg() %>%
-    set_engine("lm") %>%
+    parsnip::set_engine("lm") %>%
     fit(value ~ ., data = train_data) %>%
     recursive(
       id         = "id",
@@ -239,9 +240,9 @@ test_that("recursive 3 - panel / function / parsnip + workflow", {
       train_tail = panel_tail(train_data, id, FORECAST_HORIZON)
     )
 
-  wflw_fit_lm_recursive <- workflow() %>%
-    add_recipe(recipe(value ~ ., train_data)) %>%
-    add_model(linear_reg() %>% set_engine("lm")) %>%
+  wflw_fit_lm_recursive <- workflows::workflow() %>%
+    workflows::add_recipe(recipes::recipe(value ~ ., train_data)) %>%
+    workflows::add_model(linear_reg() %>% parsnip::set_engine("lm")) %>%
     fit(train_data) %>%
     recursive(
       id         = "id",
@@ -256,19 +257,18 @@ test_that("recursive 3 - panel / function / parsnip + workflow", {
   # * Forecasting ----
 
   forecast_tbl <- modeltime_table(
-    model_fit_lm_recursive
-    ,
+    model_fit_lm_recursive,
     wflw_fit_lm_recursive
   ) %>%
     modeltime_forecast(
       new_data    = future_data,
-      actual_data = m4_monthly,
+      actual_data = timetk::m4_monthly,
       keep_data   = TRUE
     )
 
   # forecast_tbl %>% group_by(id) %>% plot_modeltime_forecast()
-  preds_1 <- forecast_tbl %>% filter(.model_id == 1) %>% pull(.value)
-  preds_2 <- forecast_tbl %>% filter(.model_id == 2) %>% pull(.value)
+  preds_1 <- forecast_tbl %>% dplyr::filter(.model_id == 1) %>% dplyr::pull(.value)
+  preds_2 <- forecast_tbl %>% dplyr::filter(.model_id == 2) %>% dplyr::pull(.value)
   expect_equal(
     length(future_data$value),
     length(preds_1),
@@ -313,8 +313,8 @@ test_that("recursive 3 - panel / function / parsnip + workflow", {
 
   # forecast_refit_tbl %>% group_by(id) %>% plot_modeltime_forecast()
 
-  preds_1 <- forecast_refit_tbl %>% filter(.model_id == 1) %>% pull(.value)
-  preds_2 <- forecast_refit_tbl %>% filter(.model_id == 2) %>% pull(.value)
+  preds_1 <- forecast_refit_tbl %>% dplyr::filter(.model_id == 1) %>% dplyr::pull(.value)
+  preds_2 <- forecast_refit_tbl %>% dplyr::filter(.model_id == 2) %>% dplyr::pull(.value)
 
   expect_equal(
     length(future_tbl$value),

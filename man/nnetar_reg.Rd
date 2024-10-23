@@ -88,9 +88,11 @@ Other options can be set using \code{set_engine()}.
 
 The engine uses \code{\link[forecast:nnetar]{forecast::nnetar()}}.
 
-Function Parameters:\preformatted{## function (y, p, P = 1, size, repeats = 20, xreg = NULL, lambda = NULL, 
-##     model = NULL, subset = NULL, scale.inputs = TRUE, x = y, ...)
-}
+Function Parameters:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{#> function (y, p, P = 1, size, repeats = 20, xreg = NULL, lambda = NULL, 
+#>     model = NULL, subset = NULL, scale.inputs = TRUE, x = y, ...)
+}\if{html}{\out{</div>}}
 
 Parameter Notes:
 \itemize{
@@ -165,7 +167,6 @@ library(dplyr)
 library(parsnip)
 library(rsample)
 library(timetk)
-library(modeltime)
 
 # Data
 m750 <- m4_monthly \%>\% filter(id == "M750")
@@ -190,5 +191,5 @@ model_fit
 
 }
 \seealso{
-\code{\link[=fit.model_spec]{fit.model_spec()}}, \code{\link[=set_engine]{set_engine()}}
+\code{fit.model_spec()}, \code{set_engine()}
 }

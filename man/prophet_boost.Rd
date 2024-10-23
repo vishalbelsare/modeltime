@@ -67,7 +67,7 @@ unless overridden in the holidays input.}
 
 \item{mtry}{A number for the number (or proportion) of predictors that will
 be randomly sampled at each split when creating the tree models
-(specific engines only)}
+(specific engines only).}
 
 \item{trees}{An integer for the number of trees contained in
 the ensemble.}
@@ -79,7 +79,8 @@ in a node that is required for the node to be split further.}
 of splits) (specific engines only).}
 
 \item{learn_rate}{A number for the rate at which the boosting algorithm adapts
-from iteration-to-iteration (specific engines only).}
+from iteration-to-iteration (specific engines only). This is sometimes referred to
+as the shrinkage parameter.}
 
 \item{loss_reduction}{A number for the reduction in the loss function required
 to split further (specific engines only).}
@@ -193,13 +194,15 @@ Other options can be set using \code{set_engine()}.
 
 \strong{prophet_xgboost}
 
-Model 1: PROPHET (\code{prophet::prophet}):\preformatted{## function (df = NULL, growth = "linear", changepoints = NULL, n.changepoints = 25, 
-##     changepoint.range = 0.8, yearly.seasonality = "auto", weekly.seasonality = "auto", 
-##     daily.seasonality = "auto", holidays = NULL, seasonality.mode = "additive", 
-##     seasonality.prior.scale = 10, holidays.prior.scale = 10, changepoint.prior.scale = 0.05, 
-##     mcmc.samples = 0, interval.width = 0.8, uncertainty.samples = 1000, 
-##     fit = TRUE, ...)
-}
+Model 1: PROPHET (\code{prophet::prophet}):
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{#> function (df = NULL, growth = "linear", changepoints = NULL, n.changepoints = 25, 
+#>     changepoint.range = 0.8, yearly.seasonality = "auto", weekly.seasonality = "auto", 
+#>     daily.seasonality = "auto", holidays = NULL, seasonality.mode = "additive", 
+#>     seasonality.prior.scale = 10, holidays.prior.scale = 10, changepoint.prior.scale = 0.05, 
+#>     mcmc.samples = 0, interval.width = 0.8, uncertainty.samples = 1000, 
+#>     fit = TRUE, ...)
+}\if{html}{\out{</div>}}
 
 Parameter Notes:
 \itemize{
@@ -225,11 +228,13 @@ specify non-standard seasonalities using fourier series. An alternative is to us
 \code{step_fourier()} and supply custom seasonalities as Extra Regressors.
 }
 
-Model 2: XGBoost (\code{xgboost::xgb.train}):\preformatted{## function (params = list(), data, nrounds, watchlist = list(), obj = NULL, 
-##     feval = NULL, verbose = 1, print_every_n = 1L, early_stopping_rounds = NULL, 
-##     maximize = NULL, save_period = NULL, save_name = "xgboost.model", xgb_model = NULL, 
-##     callbacks = list(), ...)
-}
+Model 2: XGBoost (\code{xgboost::xgb.train}):
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{#> function (params = list(), data, nrounds, watchlist = list(), obj = NULL, 
+#>     feval = NULL, verbose = 1, print_every_n = 1L, early_stopping_rounds = NULL, 
+#>     maximize = NULL, save_period = NULL, save_name = "xgboost.model", xgb_model = NULL, 
+#>     callbacks = list(), ...)
+}\if{html}{\out{</div>}}
 
 Parameter Notes:
 \itemize{
@@ -286,12 +291,12 @@ Note that date or date-time class values are excluded from \code{xreg}.
 }
 
 \examples{
+\donttest{
 library(dplyr)
 library(lubridate)
 library(parsnip)
 library(rsample)
 library(timetk)
-library(modeltime)
 
 # Data
 m750 <- m4_monthly \%>\% filter(id == "M750")
@@ -309,7 +314,7 @@ model_spec <- prophet_boost(
     set_engine("prophet_xgboost")
 
 # Fit Spec
-\dontrun{
+
 model_fit <- model_spec \%>\%
     fit(log(value) ~ date + as.numeric(date) + month(date, label = TRUE),
         data = training(splits))
@@ -320,5 +325,5 @@ model_fit
 
 }
 \seealso{
-\code{\link[=fit.model_spec]{fit.model_spec()}}, \code{\link[=set_engine]{set_engine()}}
+\code{fit.model_spec()}, \code{set_engine()}
 }

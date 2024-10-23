@@ -8,6 +8,8 @@
 #'
 #'  - "parallel" - Uses the `parallel` and `doParallel` packages
 #'  - "spark" - Uses the `sparklyr` package
+#' @param .export_vars Environment variables that can be sent to the workers
+#' @param .packages Packages that can be sent to the workers
 #'
 #'
 #' @details
@@ -44,7 +46,8 @@
 
 #' @export
 #' @rdname parallel_start
-parallel_start <- function(..., .method = c("parallel", "spark")) {
+parallel_start <- function(..., .method = c("parallel", "spark"),
+                           .export_vars = NULL, .packages = NULL) {
 
     meth <- tolower(.method[1])
 
@@ -53,15 +56,61 @@ parallel_start <- function(..., .method = c("parallel", "spark")) {
     }
 
     if (meth == "parallel") {
+        # Step 1: Create the cluster
         cl <- parallel::makeCluster(...)
+
+        # Step 2: Register the cluster
         doParallel::registerDoParallel(cl)
-        invisible(
-            parallel::clusterCall(cl, function(x) .libPaths(x), .libPaths())
-        )
+
+        # Step 3: Export variables (if provided)
+        if (!is.null(.export_vars)) {
+            parallel::clusterExport(cl, varlist = .export_vars)
+        }
+
+        # Step 4: Load .packages (if provided)
+        if (!is.null(.packages)) {
+            parallel::clusterCall(cl, function(pkgs) {
+                lapply(pkgs, function(pkg) {
+                    if (!requireNamespace(pkg, quietly = TRUE)) {
+                        stop(paste("Package", pkg, "is not installed."))
+                    }
+                    library(pkg, character.only = TRUE)
+                })
+            }, .packages)
+        }
+
+        # Step 5: Set the library paths for each worker
+        invisible(parallel::clusterCall(cl, function(x) .libPaths(x), .libPaths()))
     }
 
     if (meth == "spark") {
+        # Step 1: Start Sparklyr session
         sparklyr::registerDoSpark(...)
+
+        # Step 2: Export variables and packages to Spark workers using spark_apply (if needed)
+        if (!is.null(.export_vars) || !is.null(.packages)) {
+            # Define a function that loads packages and applies variables
+            spark_apply_function <- function(partition, context) {
+                # Load the packages
+                if (!is.null(context$packages)) {
+                    lapply(context$packages, function(pkg) {
+                        if (!requireNamespace(pkg, quietly = TRUE)) {
+                            stop(paste("Package", pkg, "is not installed."))
+                        }
+                        library(pkg, character.only = TRUE)
+                    })
+                }
+                # Use the exported variables
+                context$export_vars  # Access the variables
+
+                # Example: Return the data (or perform operations using exported variables)
+                partition
+            }
+
+            # Step 3: Broadcast the variables and packages to Spark workers
+            context <- list(export_vars = .export_vars, packages = .packages)
+            sparklyr::spark_apply(sparklyr::spark_session, spark_apply_function, context = context)
+        }
     }
 
 }
@@ -98,7 +147,7 @@ setup_parallel_processing <- function(control, is_par_setup, t1) {
         }
 
     } else if (!is_par_setup) {
-        # Run sequentially if parallel is not set up, cores == 1 or allow_par == FALSE
+        # Run sequentially if parallel is not set up, cores == 1 or allow_par = FALSE
         if (control$verbose) message(stringr::str_glue("Running sequential backend. If parallel was intended, set `allow_par = TRUE` and `cores > 1`."))
         foreach::registerDoSEQ()
     } else {
@@ -169,7 +218,7 @@ get_operator <- function(allow_par = TRUE) {
 #'
 #' @param allow_par Logical to allow parallel computation. Default: `FALSE` (single threaded).
 #' @param cores Number of cores for computation. If -1, uses all available physical cores.
-#'  Default: `-1`.
+#'  Default: `1`.
 #' @param packages An optional character string of additional R package names that should be loaded
 #'  during parallel processing.
 #'
@@ -192,8 +241,8 @@ get_operator <- function(allow_par = TRUE) {
 #' # No parallel processing by default
 #' control_refit()
 #'
-#' # Allow parallel processing
-#' control_refit(allow_par = TRUE)
+#' # Allow parallel processing and use all cores
+#' control_refit(allow_par = TRUE, cores = -1)
 #'
 #' # Set verbosity to show additional training information
 #' control_refit(verbose = TRUE)
@@ -212,7 +261,7 @@ get_operator <- function(allow_par = TRUE) {
 #' @rdname control_modeltime
 control_refit <- function(verbose = FALSE,
                           allow_par = FALSE,
-                          cores = -1,
+                          cores = 1,
                           packages = NULL) {
 
     ret <- control_modeltime_objects(
@@ -240,7 +289,7 @@ print.control_refit <- function(x, ...) {
 #' @rdname control_modeltime
 control_fit_workflowset <- function(verbose = FALSE,
                                     allow_par = FALSE,
-                                    cores = -1,
+                                    cores = 1,
                                     packages = NULL) {
 
     ret <- control_modeltime_objects(
@@ -270,7 +319,7 @@ print.control_fit_workflowset <- function(x, ...) {
 #' @rdname control_modeltime
 control_nested_fit <- function(verbose = FALSE,
                                allow_par = FALSE,
-                               cores = -1,
+                               cores = 1,
                                packages = NULL) {
 
     ret <- control_modeltime_objects(
@@ -301,7 +350,7 @@ print.control_nested_fit <- function(x, ...) {
 #' @rdname control_modeltime
 control_nested_refit <- function(verbose = FALSE,
                                  allow_par = FALSE,
-                                 cores = -1,
+                                 cores = 1,
                                  packages = NULL) {
 
     ret <- control_modeltime_objects(
@@ -332,7 +381,7 @@ print.control_nested_refit <- function(x, ...) {
 #' @rdname control_modeltime
 control_nested_forecast <- function(verbose = FALSE,
                                  allow_par = FALSE,
-                                 cores = -1,
+                                 cores = 1,
                                  packages = NULL) {
 
     ret <- control_modeltime_objects(
@@ -362,7 +411,7 @@ print.control_nested_refit <- function(x, ...) {
 control_modeltime_objects <- function(
     verbose = FALSE,
     allow_par = FALSE,
-    cores = -1,
+    cores = 1,
     packages = NULL,
     func = NULL
 ) {
@@ -389,7 +438,7 @@ control_modeltime_objects <- function(
     if (!allow_par) {
         cores <- 1
     } else {
-        cores_available <- parallel::detectCores(logical = FALSE) # Detect Physical Cores
+        cores_available <- parallelly::availableCores(logical = FALSE) # Detect Physical Cores
 
         foreach_workers <- foreach::getDoParWorkers() # Detect how many workers currently set up
 
@@ -420,7 +469,7 @@ control_modeltime_objects <- function(
     }
 
     class_cores <- check_class_integer(cores)
-    if (class_cores == F) {
+    if (!class_cores) {
         rlang::abort(
             stringr::str_glue("{if (!is.null(func)) paste0(func, ': ') }Argument 'cores' should be a single integer value")
         )
@@ -476,6 +525,7 @@ check_class_integer <- function(x){
 #' @return
 #' Control information
 #'
+#' @keywords internal
 #' @export
 load_namespace <- function(x, full_load) {
     if (length(x) == 0) {

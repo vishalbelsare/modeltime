@@ -85,14 +85,16 @@ Other options can be set using \code{set_engine()}.
 
 The engine uses \code{\link[forecast:ets]{forecast::ets()}}.
 
-Function Parameters:\preformatted{## function (y, model = "ZZZ", damped = NULL, alpha = NULL, beta = NULL, gamma = NULL, 
-##     phi = NULL, additive.only = FALSE, lambda = NULL, biasadj = FALSE, 
-##     lower = c(rep(1e-04, 3), 0.8), upper = c(rep(0.9999, 3), 0.98), opt.crit = c("lik", 
-##         "amse", "mse", "sigma", "mae"), nmse = 3, bounds = c("both", "usual", 
-##         "admissible"), ic = c("aicc", "aic", "bic"), restrict = TRUE, allow.multiplicative.trend = FALSE, 
-##     use.initial.values = FALSE, na.action = c("na.contiguous", "na.interp", 
-##         "na.fail"), ...)
-}
+Function Parameters:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{#> function (y, model = "ZZZ", damped = NULL, alpha = NULL, beta = NULL, gamma = NULL, 
+#>     phi = NULL, additive.only = FALSE, lambda = NULL, biasadj = FALSE, 
+#>     lower = c(rep(1e-04, 3), 0.8), upper = c(rep(0.9999, 3), 0.98), opt.crit = c("lik", 
+#>         "amse", "mse", "sigma", "mae"), nmse = 3, bounds = c("both", "usual", 
+#>         "admissible"), ic = c("aicc", "aic", "bic"), restrict = TRUE, allow.multiplicative.trend = FALSE, 
+#>     use.initial.values = FALSE, na.action = c("na.contiguous", "na.interp", 
+#>         "na.fail"), ...)
+}\if{html}{\out{</div>}}
 
 The main arguments are \code{model} and \code{damped} are defined using:
 \itemize{
@@ -119,8 +121,10 @@ models will be fit.
 
 The engine uses \code{\link[forecast:croston]{forecast::croston()}}.
 
-Function Parameters:\preformatted{## function (y, h = 10, alpha = 0.1, x = y)
-}
+Function Parameters:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{#> function (y, h = 10, alpha = 0.1, x = y)
+}\if{html}{\out{</div>}}
 
 The main arguments are defined using:
 \itemize{
@@ -147,15 +151,15 @@ models will be fit.
 
 The engine uses \code{\link[smooth:es]{smooth::es()}}.
 
-Function Parameters:\preformatted{## function (y, model = "ZZZ", persistence = NULL, phi = NULL, initial = c("optimal", 
-##     "backcasting"), initialSeason = NULL, ic = c("AICc", "AIC", "BIC", 
-##     "BICc"), loss = c("likelihood", "MSE", "MAE", "HAM", "MSEh", "TMSE", 
-##     "GTMSE", "MSCE"), h = 10, holdout = FALSE, cumulative = FALSE, interval = c("none", 
-##     "parametric", "likelihood", "semiparametric", "nonparametric"), level = 0.95, 
-##     bounds = c("usual", "admissible", "none"), silent = c("all", "graph", 
-##         "legend", "output", "none"), xreg = NULL, xregDo = c("use", "select"), 
-##     initialX = NULL, ...)
-}
+Function Parameters:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{#> function (y, model = "ZZZ", lags = c(frequency(y)), persistence = NULL, 
+#>     phi = NULL, initial = c("optimal", "backcasting", "complete"), initialSeason = NULL, 
+#>     ic = c("AICc", "AIC", "BIC", "BICc"), loss = c("likelihood", "MSE", 
+#>         "MAE", "HAM", "MSEh", "TMSE", "GTMSE", "MSCE"), h = 10, holdout = FALSE, 
+#>     bounds = c("usual", "admissible", "none"), silent = TRUE, xreg = NULL, 
+#>     regressors = c("use", "select"), initialX = NULL, ...)
+}\if{html}{\out{</div>}}
 
 The main arguments \code{model} and \code{phi} are defined using:
 \itemize{
@@ -238,11 +242,11 @@ Note that date or date-time class values are excluded from \code{xreg}.
 }
 
 \examples{
+\dontshow{if (rlang::is_installed("smooth")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 library(parsnip)
 library(rsample)
 library(timetk)
-library(modeltime)
 library(smooth)
 
 # Data
@@ -329,8 +333,8 @@ model_fit <- model_spec \%>\%
     fit(value ~ date, data = training(splits))
 model_fit
 }
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=fit.model_spec]{fit.model_spec()}}, \code{\link[=set_engine]{set_engine()}}
+\code{fit.model_spec()}, \code{set_engine()}
 }

@@ -191,15 +191,15 @@
 #'
 #'
 #'
-#' @seealso [fit.model_spec()], [set_engine()]
+#' @seealso `fit.model_spec()`, `set_engine()`
 #'
 #' @examples
+#' \donttest{
 #' library(dplyr)
 #' library(lubridate)
 #' library(parsnip)
 #' library(rsample)
 #' library(timetk)
-#' library(modeltime)
 #'
 #' # Data
 #' m750 <- m4_monthly %>% filter(id == "M750")
@@ -217,7 +217,7 @@
 #'     set_engine("prophet_xgboost")
 #'
 #' # Fit Spec
-#' \dontrun{
+#'
 #' model_fit <- model_spec %>%
 #'     fit(log(value) ~ date + as.numeric(date) + month(date, label = TRUE),
 #'         data = training(splits))
@@ -305,7 +305,7 @@ update.prophet_boost <- function(object, parameters = NULL,
                                  sample_size = NULL, stop_iter = NULL,
                                  fresh = FALSE, ...) {
 
-    parsnip::update_dot_check(...)
+    eng_args <- parsnip::update_engine_parameters(object$eng_args, fresh, ...)
 
     if (!is.null(parameters)) {
         parameters <- parsnip::check_final_param(parameters)
@@ -342,12 +342,15 @@ update.prophet_boost <- function(object, parameters = NULL,
 
     if (fresh) {
         object$args <- args
+        object$eng_args <- eng_args
     } else {
         null_args <- purrr::map_lgl(args, parsnip::null_value)
         if (any(null_args))
             args <- args[!null_args]
         if (length(args) > 0)
             object$args[names(args)] <- args
+        if (length(eng_args) > 0)
+            object$eng_args[names(eng_args)] <- eng_args
     }
 
     parsnip::new_model_spec(
@@ -402,6 +405,7 @@ translate.prophet_boost <- function(x, engine = x$engine, ...) {
 #' is used.
 #' @param ... Additional arguments passed to `xgboost::xgb.train`
 #'
+#' @keywords internal
 #' @export
 prophet_xgboost_fit_impl <- function(x, y,
                                      df = NULL,
@@ -457,7 +461,7 @@ prophet_xgboost_fit_impl <- function(x, y,
 
     if (growth == "logistic") {
         if (all(c(is.null(logistic_cap), is.null(logistic_floor)))) {
-            glubort("Capacities must be supplied for `growth = 'logistic'`. Try specifying at least one of 'logistic_cap' or 'logistic_floor'")
+            cli::cli_abort("Capacities must be supplied for `growth = 'logistic'`. Try specifying at least one of 'logistic_cap' or 'logistic_floor'")
         }
     }
 
@@ -640,6 +644,7 @@ predict.prophet_xgboost_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `prophet::predict()`
 #'
+#' @keywords internal
 #' @export
 prophet_xgboost_predict_impl <- function(object, new_data, ...) {
 

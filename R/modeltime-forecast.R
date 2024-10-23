@@ -16,10 +16,16 @@
 #'  This is designed to estimate future confidence from _out-of-sample prediction error_.
 #' @param conf_by_id Whether or not to produce confidence interval estimates by an ID feature.
 #'
-#' - When `FALSE`, a global model confidence interval is provided.
+#'  - When `FALSE`, a global model confidence interval is provided.
 #'
 #'  - If `TRUE`, a local confidence interval is provided group-wise for each time series ID.
 #'    To enable local confidence interval, an `id` must be provided during `modeltime_calibrate()`.
+#'
+#' @param conf_method Algorithm used to produce confidence intervals. All CI's are Conformal Predictions. Choose one of:
+#'
+#'  - `conformal_default`: Uses `qnorm()` to compute quantiles from out-of-sample (test set) residuals.
+#'
+#'  - `conformal_split`: Uses the split method split conformal inference method described by Lei _et al_ (2018)
 #'
 #' @param keep_data Whether or not to keep the `new_data` and `actual_data` as extra columns in the results.
 #'  This can be useful if there is an important feature in the `new_data` and `actual_data` needed
@@ -108,16 +114,29 @@
 #' The out-of-sample error estimates are then carried through and
 #' applied to applied to any future forecasts.
 #'
-#' The confidence interval can be adjusted with the `conf_interval` parameter. An
-#' 80% confidence interval estimates a normal (Gaussian distribution) that assumes that
-#' 80% of the future data will fall within the upper and lower confidence limits.
+#' The confidence interval can be adjusted with the `conf_interval` parameter. The algorithm used
+#' to produce confidence intervals can be changed with the `conf_method` parameter.
+#'
+#' _Conformal Default Method:_
+#'
+#' When `conf_method = "conformal_default"` (default), this method uses `qnorm()`
+#' to produce a 95% confidence interval by default. It estimates a normal (Gaussian distribution)
+#' based on the out-of-sample errors (residuals).
 #'
 #' The confidence interval is _mean-adjusted_, meaning that if the mean of the residuals
 #' is non-zero, the confidence interval is adjusted to widen the interval to capture
 #' the difference in means.
 #'
+#' _Conformal Split Method:_
+#'
+#' When `conf_method = "conformal_split`, this method uses the split conformal inference method
+#' described by Lei _et al_ (2018). This is also implemented in the `probably` R package's
+#' `int_conformal_split()` function.
+#'
+#' _What happens to the confidence interval after refitting models?_
+#'
 #' Refitting has no affect on the confidence interval since this is calculated independently of
-#' the refitted model (on data with a smaller sample size). New observations typically improve
+#' the refitted model. New observations typically improve
 #' future accuracy, which in most cases makes the out-of-sample confidence intervals conservative.
 #'
 #' __Keep Data__
@@ -132,14 +151,15 @@
 #' By default, `modeltime_forecast()` keeps the original order of the data.
 #' If desired, the user can sort the output by `.key`, `.model_id` and `.index`.
 #'
+#' @references
+#' Lei, Jing, et al. "Distribution-free predictive inference for regression."
+#' _Journal of the American Statistical Association_ 113.523 (2018): 1094-1111.
 #'
 #' @examples
-#' library(tidyverse)
-#' library(lubridate)
+#' library(dplyr)
 #' library(timetk)
 #' library(parsnip)
 #' library(rsample)
-#' library(modeltime)
 #'
 #' # Data
 #' m750 <- m4_monthly %>% filter(id == "M750")
@@ -204,7 +224,7 @@ NULL
 #' @export
 #' @rdname modeltime_forecast
 modeltime_forecast <- function(object, new_data = NULL, h = NULL, actual_data = NULL,
-                               conf_interval = 0.95, conf_by_id = FALSE,
+                               conf_interval = 0.95, conf_by_id = FALSE, conf_method = "conformal_default",
                                keep_data = FALSE, arrange_index = FALSE, ...) {
 
     # Required arguments & messages
@@ -250,19 +270,25 @@ modeltime_forecast <- function(object, new_data = NULL, h = NULL, actual_data = 
         }
     }
 
+    if (!conf_method %in% c("conformal_default", "conformal_split")) {
+        rlang::abort('conf_method must be one of "conformal_default", "conformal_split"')
+    }
+
     UseMethod("modeltime_forecast")
 }
 
 #' @export
 modeltime_forecast.default <- function(object, new_data = NULL, h = NULL, actual_data = NULL,
-                                       conf_interval = 0.95, conf_by_id = FALSE,
+                                       conf_interval = 0.95, conf_by_id = FALSE,  conf_method = "conformal_default",
                                        keep_data = FALSE, arrange_index = FALSE, ...) {
-    glubort("Received an object of class: {class(object)[1]}. Expected an object of class:\n 1. 'mdl_time_tbl' - A Model Time Table made with 'modeltime_table()' and calibrated with 'modeltime_calibrate()'.")
+    cli::cli_abort(c("Received an object of class: {.obj_type_friendly {object}}.",
+                     "Expected an object of class:",
+                     "1. 'mdl_time_tbl' - A Model Time Table made with 'modeltime_table()' and calibrated with 'modeltime_calibrate()'."))
 }
 
 #' @export
 modeltime_forecast.mdl_time_tbl <- function(object, new_data = NULL, h = NULL, actual_data = NULL,
-                                            conf_interval = 0.95, conf_by_id = FALSE,
+                                            conf_interval = 0.95, conf_by_id = FALSE, conf_method = "conformal_default",
                                             keep_data = FALSE, arrange_index = FALSE, ...) {
 
     data <- object
@@ -271,7 +297,7 @@ modeltime_forecast.mdl_time_tbl <- function(object, new_data = NULL, h = NULL, a
 
     # HANDLE CALIBRATION DATA
     if (!all(c(".type", ".calibration_data") %in% names(data))) {
-        # glubort("Expecting columns '.type' and '.calibration_data'. Try running 'modeltime_calibrate()' before using 'modeltime_forecast()'.")
+        # cli::cli_abort("Expecting columns '.type' and '.calibration_data'. Try running 'modeltime_calibrate()' before using 'modeltime_forecast()'.")
         conf_interval = NULL
         data <- data %>%
             dplyr::mutate(
@@ -353,9 +379,10 @@ modeltime_forecast.mdl_time_tbl <- function(object, new_data = NULL, h = NULL, a
                     safe_conf_interval_map_by_id(
                         data_calibration,
                         conf_interval = conf_interval,
+                        conf_method   = conf_method,
                         id            = !! id_col
                     ) %>%
-                    dplyr::select(.model_id, .model_desc, .key, .index, .value, .conf_lo, .conf_hi, dplyr::all_of(names(new_data)))
+                    dplyr::select(".model_id", ".model_desc", ".key", ".index", ".value", ".conf_lo", ".conf_hi", dplyr::all_of(names(new_data)))
 
                 # Remove unnecessary columns if `keep_data = FALSE`. Required to keep the id column.
                 if (!keep_data) {
@@ -382,7 +409,11 @@ modeltime_forecast.mdl_time_tbl <- function(object, new_data = NULL, h = NULL, a
 
         } else {
             ret <- ret %>%
-                safe_conf_interval_map(data_calibration, conf_interval = conf_interval) %>%
+                safe_conf_interval_map(
+                    data_calibration,
+                    conf_interval = conf_interval,
+                    conf_method   = conf_method
+                ) %>%
                 dplyr::relocate(dplyr::starts_with(".conf_"), .after = .value)
 
             # Remove unnecessary columns if `keep_data = FALSE`
@@ -400,7 +431,37 @@ modeltime_forecast.mdl_time_tbl <- function(object, new_data = NULL, h = NULL, a
     ret <- ret %>%
         dplyr::filter(.model_desc == "ACTUAL" | .key == "prediction")
 
+
+    # STRUCTURE ----
+    class(ret) <- c("mdl_forecast_tbl", class(ret))
+
+    attr(ret, "conf_interval") <- conf_interval
+    attr(ret, "conf_method")   <- conf_method
+    attr(ret, "conf_by_id")    <- conf_by_id
+
     return(ret)
+}
+
+#' @export
+print.mdl_forecast_tbl <- function(x, ...) {
+
+    # Collect inputs
+    conf_interval <- attr(x, 'conf_interval')
+    conf_method   <- attr(x, 'conf_method')
+    conf_by_id    <- attr(x, 'conf_by_id')
+
+    conf_by_id_desc <- if (conf_by_id) {
+        "LOCAL CONFIDENCE"
+    } else {
+        "GLOBAL CONFIDENCE"
+    }
+
+    cat("# Forecast Results\n")
+    cat("  ")
+    cli::cli_text(cli::col_grey("Conf Method: {conf_method} | Conf Interval: {conf_interval} | Conf By ID: {conf_by_id} ({conf_by_id_desc})"))
+    # cli::cli_rule()
+    class(x) <- class(x)[!(class(x) %in% c("mdl_forecast_tbl"))]
+    print(x, ...)
 }
 
 
@@ -443,15 +504,27 @@ safe_modeltime_forecast_map <- function(data, new_data = NULL, h = NULL, actual_
 
 # SAFE CONF INTERVAL MAPPERS ----
 
-safe_conf_interval_map <- function(data, data_calibration, conf_interval) {
+safe_conf_interval_map <- function(data, data_calibration, conf_interval, conf_method) {
 
-    safe_ci <- purrr::safely(
-        centered_residuals,
-        otherwise = tibble::tibble(
-            .conf_lo = NA,
-            .conf_hi = NA
-        ),
-        quiet = FALSE)
+    empty_ci_tbl <- tibble::tibble(
+        .conf_lo = NA,
+        .conf_hi = NA
+    )
+
+    if (conf_method == "conformal_default") {
+        safe_ci <- purrr::safely(
+            conformal_default_func,
+            otherwise = empty_ci_tbl,
+            quiet = FALSE
+        )
+    }
+    if (conf_method == "conformal_split") {
+        safe_ci <- purrr::safely(
+            conformal_split_func,
+            otherwise = empty_ci_tbl,
+            quiet = FALSE
+        )
+    }
 
     data %>%
         dplyr::group_by(.model_id) %>%
@@ -467,15 +540,27 @@ safe_conf_interval_map <- function(data, data_calibration, conf_interval) {
         dplyr::ungroup()
 }
 
-safe_conf_interval_map_by_id <- function(data, data_calibration, conf_interval, id) {
+safe_conf_interval_map_by_id <- function(data, data_calibration, conf_interval, id, conf_method) {
 
-    safe_ci <- purrr::safely(
-        centered_residuals,
-        otherwise = tibble::tibble(
-            .conf_lo = NA,
-            .conf_hi = NA
-        ),
-        quiet = FALSE)
+    empty_ci_tbl <- tibble::tibble(
+        .conf_lo = NA,
+        .conf_hi = NA
+    )
+
+    if (conf_method == "conformal_default") {
+        safe_ci <- purrr::safely(
+            conformal_default_func,
+            otherwise = empty_ci_tbl,
+            quiet = FALSE
+        )
+    }
+    if (conf_method == "conformal_split") {
+        safe_ci <- purrr::safely(
+            conformal_split_func,
+            otherwise = empty_ci_tbl,
+            quiet = FALSE
+        )
+    }
 
     forecast_nested_tbl <- data %>%
         tibble::rowid_to_column(var = "..rowid") %>%
@@ -512,8 +597,8 @@ safe_conf_interval_map_by_id <- function(data, data_calibration, conf_interval, 
         )
 }
 
-
-centered_residuals <- function(data_1, data_2, conf_interval) {
+# * DEFAULT CI METHOD: QUANTILE OF NORMAL DISTRIBUTION AROUND PREDICTIONS ----
+conformal_default_func <- function(data_1, data_2, conf_interval) {
 
     # Collect absolute residuals
     ret <- tryCatch({
@@ -521,12 +606,50 @@ centered_residuals <- function(data_1, data_2, conf_interval) {
         residuals <- c(data_2$.residuals, -data_2$.residuals)
         s <- stats::sd(residuals)
 
-        data_1 %>%
+        ci_tbl <- data_1 %>%
             dplyr::mutate(
                 .conf_lo = stats::qnorm((1-conf_interval)/2, mean = .value, sd = s),
                 .conf_hi = stats::qnorm((1+conf_interval)/2, mean = .value, sd = s)
             ) %>%
             dplyr::select(.conf_lo, .conf_hi)
+
+        ci_tbl
+
+    }, error = function(e) {
+        tibble::tibble(
+            .conf_lo = NA,
+            .conf_hi = NA
+        )
+    })
+
+    return(ret)
+
+}
+
+# * CONFORMAL PREDICTION VIA SPLIT METHOD ----
+# https://github.com/tidymodels/probably/blob/c46326651109fb2ebd1b3762b3cb086cfb96ac88/R/conformal_infer_split.R#L99
+conformal_split_func <- function(data_1, data_2, conf_interval) {
+
+    # Collect absolute residuals
+    ret <- tryCatch({
+
+        residuals        <- data_2$.residuals
+        residuals_sorted <- residuals %>%
+            abs() %>%
+            sort(decreasing = FALSE)
+
+        n     <- nrow(data_2)
+        q_ind <- ceiling(conf_interval * n)
+        q_val <- residuals_sorted[q_ind]
+
+        ci_tbl <- data_1 %>%
+            dplyr::mutate(
+                .conf_lo = .value - q_val,
+                .conf_hi = .value + q_val
+            ) %>%
+            dplyr::select(.conf_lo, .conf_hi)
+
+        ci_tbl
 
     }, error = function(e) {
         tibble::tibble(
@@ -627,9 +750,9 @@ mdl_time_forecast.model_fit <- function(object, calibration_data, new_data = NUL
 
     modeltime_forecast <- tryCatch({
 
-        if (inherits(object, "_elnet") && inherits(object, "recursive")) {
+        if (detect_net(object) && inherits(object, "recursive")) {
             predictions_tbl <- object %>% predict.recursive(new_data = new_data)
-        } else if (inherits(object, "_elnet") && inherits(object, "recursive_panel")) {
+        } else if (detect_net(object) && inherits(object, "recursive_panel")) {
             predictions_tbl <- object %>% predict.recursive_panel(new_data = new_data)
         } else {
             predictions_tbl <- object %>% stats::predict(new_data = new_data)
@@ -641,16 +764,15 @@ mdl_time_forecast.model_fit <- function(object, calibration_data, new_data = NUL
     }, error = function(e) {
         if (any(c(h_provided, calib_provided))) {
             # Most likely issue: need to provide external regressors
-            glubort("Problem occurred during prediction. Most likely cause is missing external regressors. Try using 'new_data' and supply a dataset containing all required columns. {e}")
+            cli::cli_abort("Problem occurred during prediction. Most likely cause is missing external regressors. Try using 'new_data' and supply a dataset containing all required columns. {e}")
         } else {
-            glubort("Problem occurred during prediction. {e}")
+            cli::cli_abort("Problem occurred during prediction. {e}")
         }
     })
 
     # Format data
     data_formatted <- modeltime_forecast %>%
-        dplyr::mutate(.key = "prediction") %>%
-        dplyr::select(.key, dplyr::everything())
+        dplyr::mutate(.key = "prediction", .before = 0)
 
     # COMBINE ACTUAL DATA
 
@@ -658,6 +780,8 @@ mdl_time_forecast.model_fit <- function(object, calibration_data, new_data = NUL
 
         # setup
         nms_final     <- names(data_formatted)
+
+        # print(nms_final)
 
         if (length(object$preproc$y_var) > 0) {
             fit_interface <-  "formula"
@@ -704,9 +828,22 @@ mdl_time_forecast.model_fit <- function(object, calibration_data, new_data = NUL
                 }
             }
 
+            # Issure #228 - fix `.pred_res`
             data_formatted <- actual_data %>%
-                dplyr::bind_rows(data_formatted) %>%
-                dplyr::mutate(.pred = ifelse(is.na(.pred), !! target_sym, .pred))
+                dplyr::bind_rows(data_formatted)
+
+            if (".pred_res" %in% colnames(data_formatted)) {
+                data_formatted <- data_formatted %>%
+                    dplyr::rename(.pred = .pred_res)
+            }
+
+            if (".pred_res" %in% nms_final) {
+                nms_final <- stringr::str_replace(nms_final, ".pred_res", ".pred")
+            }
+
+            data_formatted <- data_formatted %>%
+                dplyr::mutate(.pred = ifelse(is.na(.pred), !! target_sym, .pred)) %>%
+                dplyr::select(!!! rlang::syms(nms_final))
 
         } else {
             # XY Interface
@@ -720,6 +857,16 @@ mdl_time_forecast.model_fit <- function(object, calibration_data, new_data = NUL
 
         }
 
+        # Issue #228 - fix .pred_res
+        if (".pred_res" %in% colnames(data_formatted)) {
+            data_formatted <- data_formatted %>%
+                dplyr::rename(.pred = .pred_res)
+        }
+
+        if (".pred_res" %in% nms_final) {
+            nms_final <- stringr::str_replace(nms_final, ".pred_res", ".pred")
+        }
+
         data_formatted <- data_formatted %>%
             dplyr::select(!!! rlang::syms(nms_final))
 
@@ -727,8 +874,7 @@ mdl_time_forecast.model_fit <- function(object, calibration_data, new_data = NUL
 
     # FINALIZE
     ret <- data_formatted %>%
-        dplyr::rename(.value = .pred) %>%
-        dplyr::select(.key, .index, .value) %>%
+        dplyr::select(.key, .index, .value = .pred) %>%
         dplyr::mutate(.key = factor(.key, levels = c("actual", "prediction")))
 
     # Keep Data
@@ -773,7 +919,13 @@ mdl_time_forecast.workflow <- function(object, calibration_data, new_data = NULL
     # WORKFLOW MOLD
 
     # Contains $predictors, $outcomes, $blueprint
-    mld <- object %>% workflows::extract_mold()
+    # mld <- object %>% workflows::extract_mold()
+
+    # UPGRADE MOLD (TEMP FIX) ----
+    # - models built with hardhat <1.0.0 have issue
+    #   https://github.com/tidymodels/hardhat/issues/200
+    preprocessor <- workflows::extract_preprocessor(object)
+    mld          <- hardhat::mold(preprocessor, preprocessor$template)
 
     # NEW DATA
 
@@ -831,9 +983,9 @@ mdl_time_forecast.workflow <- function(object, calibration_data, new_data = NULL
     }, error = function(e) {
         if (any(c(h_provided, calib_provided))) {
             # Most likely issue: need to provide external regressors
-            glubort("Problem occurred in getting predictors from new data. Most likely cause is missing external regressors. Try using 'new_data' and supply a dataset containing all required columns. {e}")
+            cli::cli_abort("Problem occurred in getting predictors from new data. Most likely cause is missing external regressors. Try using 'new_data' and supply a dataset containing all required columns. {e}")
         } else {
-            glubort("Problem occurred getting predictors from new data. {e}")
+            cli::cli_abort("Problem occurred getting predictors from new data. {e}")
         }
     })
 
@@ -864,7 +1016,7 @@ mdl_time_forecast.workflow <- function(object, calibration_data, new_data = NULL
                 time_stamp_predictors_tbl <- new_data_forged$predictors %>%
                     dplyr::mutate(.index = idx[new_data_missing_removed_tbl$..id])
             } else {
-                glubort("Problem occurred combining processed data with timestamps. Most likely cause is rows being added or removed during preprocessing. Try imputing missing values to retain the full number of rows.")
+                cli::cli_abort("Problem occurred combining processed data with timestamps. Most likely cause is rows being added or removed during preprocessing. Try imputing missing values to retain the full number of rows.")
             }
         }
     }
@@ -879,8 +1031,7 @@ mdl_time_forecast.workflow <- function(object, calibration_data, new_data = NULL
     }
 
     # Issue - hardhat::forge defaults to outcomes = FALSE, which creates an error at predict.workflow()
-    blueprint <- object$pre$mold$blueprint
-    forged    <- hardhat::forge(new_data, blueprint, outcomes = TRUE)
+    forged    <- hardhat::forge(new_data, mld$blueprint, outcomes = TRUE)
     new_data  <- forged$predictors
     fit       <- object$fit$fit
 
@@ -909,9 +1060,9 @@ mdl_time_forecast.workflow <- function(object, calibration_data, new_data = NULL
     }
 
     # PREDICT
-    if (inherits(fit, "_elnet") && inherits(fit, "recursive")) {
+    if (detect_net(fit) && inherits(fit, "recursive")) {
         data_formatted <- fit %>% predict.recursive(new_data = df)
-    } else if (inherits(fit, "_elnet") && inherits(fit, "recursive_panel")) {
+    } else if (detect_net(fit) && inherits(fit, "recursive_panel")) {
         data_formatted <- fit %>% predict.recursive_panel(new_data = df)
     } else {
         data_formatted <- fit %>% stats::predict(new_data = df)
@@ -919,8 +1070,7 @@ mdl_time_forecast.workflow <- function(object, calibration_data, new_data = NULL
 
     data_formatted <- data_formatted %>%
         dplyr::bind_cols(time_stamp_predictors_tbl) %>%
-        dplyr::mutate(.key = "prediction") %>%
-        dplyr::select(.key, dplyr::everything())
+        dplyr::mutate(.key = "prediction", .before = 0)
 
 
     # COMBINE ACTUAL DATA
@@ -929,7 +1079,7 @@ mdl_time_forecast.workflow <- function(object, calibration_data, new_data = NULL
 
         nms_final <- names(data_formatted)
 
-        mld <- object %>% workflows::extract_mold()
+        # mld <- object %>% workflows::extract_mold()
 
         actual_data_forged <- hardhat::forge(new_data = actual_data, blueprint = mld$blueprint, outcomes = TRUE)
 
@@ -993,8 +1143,21 @@ mdl_time_forecast.workflow <- function(object, calibration_data, new_data = NULL
         if (!is.null(actual_data_prepped)) {
             target_sym <- rlang::sym(names(actual_data_prepped)[1])
 
+            # Issue #228 - fix .pred_res
             data_formatted <- actual_data_prepped %>%
-                dplyr::bind_rows(data_formatted) %>%
+                dplyr::bind_rows(data_formatted)
+
+
+            if (".pred_res" %in% colnames(data_formatted)) {
+                data_formatted <- data_formatted %>%
+                    dplyr::rename(.pred = .pred_res)
+            }
+
+            if (".pred_res" %in% nms_final) {
+                nms_final <- stringr::str_replace(nms_final, ".pred_res", ".pred")
+            }
+
+            data_formatted <- data_formatted %>%
                 dplyr::mutate(.pred = ifelse(is.na(.pred), !! target_sym, .pred)) %>%
                 dplyr::select(!!! rlang::syms(nms_final))
         }
@@ -1002,9 +1165,15 @@ mdl_time_forecast.workflow <- function(object, calibration_data, new_data = NULL
     }
 
     # FINALIZE
+
+    # Issue #228 - fix .pred_res
+    if (".pred_res" %in% colnames(data_formatted)) {
+        data_formatted <- data_formatted %>%
+            dplyr::rename(.pred = .pred_res)
+    }
+
     ret <- data_formatted %>%
-        dplyr::rename(.value = .pred) %>%
-        dplyr::select(.key, .index, .value) %>%
+        dplyr::select(.key, .index, .value = .pred) %>%
         dplyr::mutate(.key = factor(.key, levels = c("actual", "prediction")))
 
     # Keep Data
@@ -1036,3 +1205,12 @@ mdl_time_forecast.workflow <- function(object, calibration_data, new_data = NULL
 }
 
 
+
+detect_net <- function(object){
+    if (inherits(object, "_fishnet") || inherits(object, "_elnet") || inherits(object, "_multnet") || inherits(object, "_lognet")){
+        res <- TRUE
+    } else {
+        res <- FALSE
+    }
+    return(res)
+}

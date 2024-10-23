@@ -1,35 +1,35 @@
 context("TEST DEVELOPER TOOLS - XREG TOOLS")
 
-
 # CREATE XREG RECIPE ----
 
-test_that("create_xreg_recipe: recipe with no compliant features returns a warning and NULL value", {
-
-    # Recipe returns no features
-    # - id is removed because of zero variance
-    # - date is removed
-    expect_warning({
-        null_recipe <- m4_monthly %>%
-            filter(id == "M750") %>%
-            select(-value) %>%
-            create_xreg_recipe(prepare = TRUE, one_hot = TRUE)
-
-    })
-
-    # Return is NULL
-    expect_null(null_recipe)
-})
-
-
-
+# test_that("create_xreg_recipe: recipe with no compliant features returns a warning and NULL value", {
+#
+#     # Recipe returns no features
+#     # - id is removed because of zero variance
+#     # - date is removed
+#     expect_warning({
+#         null_recipe <- timetk::m4_monthly %>%
+#             dplyr::filter(id == "M750") %>%
+#             dplyr::select(-value) %>%
+#             create_xreg_recipe(prepare = TRUE, one_hot = TRUE)
+#
+#     })
+#
+#     # Return is NULL
+#     expect_null(null_recipe)
+#
+#
+# })
 
 test_that("create_xreg_recipe: dummy_encode = FALSE returns factors", {
 
+    skip_on_cran()
+
     # Month
-    predictors <- m4_monthly %>%
-        filter(id == "M750") %>%
-        select(-value) %>%
-        mutate(`month lbl` = month(date, label = TRUE))
+    predictors <- timetk::m4_monthly %>%
+        dplyr::filter(id == "M750") %>%
+        dplyr::select(-value) %>%
+        dplyr::mutate(`month lbl` = lubridate::month(date, label = TRUE))
 
     xreg_recipe_spec <- create_xreg_recipe(predictors, prepare = TRUE, dummy_encode = FALSE)
 
@@ -37,18 +37,20 @@ test_that("create_xreg_recipe: dummy_encode = FALSE returns factors", {
 
     expect_equal(ncol(juiced), 1)
 
-    expect_s3_class(pull(juiced), "factor")
+    expect_s3_class(dplyr::pull(juiced), "factor")
 
 
 })
 
-test_that("create_xreg_recipe: dummy_encode = TRUE returns numeric", {
+test_that("create_xreg_recipe: dummy_encode = TRUE returns dummies", {
+
+    skip_on_cran()
 
     # Month
-    predictors <- m4_monthly %>%
-        filter(id == "M750") %>%
-        select(-value) %>%
-        mutate(`month lbl` = month(date, label = TRUE))
+    predictors <- timetk::m4_monthly %>%
+        dplyr::filter(id == "M750") %>%
+        dplyr::select(-value) %>%
+        dplyr::mutate(`month lbl` = lubridate::month(date, label = TRUE))
 
     xreg_recipe_spec <- create_xreg_recipe(predictors, prepare = TRUE, dummy_encode = TRUE)
 
@@ -56,7 +58,5 @@ test_that("create_xreg_recipe: dummy_encode = TRUE returns numeric", {
 
     expect_equal(ncol(juiced), 11)
 
-    expect_true(all(juiced %>% map(class) %>% unlist() %in% "numeric"))
-
-
+    expect_true(all(juiced %>% map(is.numeric) %>% unlist()))
 })

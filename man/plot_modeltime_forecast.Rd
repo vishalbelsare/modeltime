@@ -12,12 +12,17 @@ plot_modeltime_forecast(
   .smooth = FALSE,
   .legend_show = TRUE,
   .legend_max_width = 40,
+  .facet_ncol = 1,
+  .facet_nrow = 1,
+  .facet_scales = "free_y",
   .title = "Forecast Plot",
   .x_lab = "",
   .y_lab = "",
   .color_lab = "Legend",
   .interactive = TRUE,
   .plotly_slider = FALSE,
+  .trelliscope = FALSE,
+  .trelliscope_params = list(),
   ...
 )
 }
@@ -38,6 +43,13 @@ Can save space with long model descriptions.}
 
 \item{.legend_max_width}{Numeric. The width of truncation to apply to the legend text.}
 
+\item{.facet_ncol}{Number of facet columns.}
+
+\item{.facet_nrow}{Number of facet rows (only used for \code{.trelliscope = TRUE})}
+
+\item{.facet_scales}{Control facet x & y-axis ranges.
+Options include "fixed", "free", "free_y", "free_x"}
+
 \item{.title}{Title for the plot}
 
 \item{.x_lab}{X-axis label for the plot}
@@ -48,7 +60,19 @@ Can save space with long model descriptions.}
 
 \item{.interactive}{Returns either a static (\code{ggplot2}) visualization or an interactive (\code{plotly}) visualization}
 
-\item{.plotly_slider}{If TRUE, returns a plotly date range slider.}
+\item{.plotly_slider}{If \code{TRUE}, returns a plotly date range slider.}
+
+\item{.trelliscope}{Returns either a normal plot or a trelliscopejs plot (great for many time series)
+Must have \code{trelliscopejs} installed.}
+
+\item{.trelliscope_params}{Pass parameters to the \code{trelliscopejs::facet_trelliscope()} function as a \code{list()}.
+The only parameters that cannot be passed are:
+\itemize{
+\item \code{ncol}: use \code{.facet_ncol}
+\item \code{nrow}: use \code{.facet_nrow}
+\item \code{scales}: use \code{facet_scales}
+\item \code{as_plotly}: use \code{.interactive}
+}}
 
 \item{...}{Additional arguments passed to \code{\link[timetk:plot_time_series]{timetk::plot_time_series()}}.}
 }
@@ -56,16 +80,15 @@ Can save space with long model descriptions.}
 A static \code{ggplot2} plot or an interactive \code{plotly} plot containing a forecast
 }
 \description{
-This is a wrapper for \code{\link[=plot_time_series]{plot_time_series()}} that generates an interactive (\code{plotly}) or static
+This is a wrapper for \code{timetk::plot_time_series()} that generates an interactive (\code{plotly}) or static
 (\code{ggplot2}) plot with the forecasted data.
 }
 \examples{
-library(tidyverse)
+library(dplyr)
 library(lubridate)
 library(timetk)
 library(parsnip)
 library(rsample)
-library(modeltime)
 
 # Data
 m750 <- m4_monthly \%>\% filter(id == "M750")

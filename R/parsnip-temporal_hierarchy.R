@@ -50,7 +50,7 @@
 #' The standardized parameter names in `modeltime` can be mapped to their original
 #' names in each engine:
 #'
-#' ```{r echo = FALSE}
+#' ```{r echo = FALSE, eval = rlang::is_installed("thief")}
 #' # parsnip::convert_args("temporal_hierarchy")
 #' tibble::tribble(
 #'     ~ "modeltime", ~ "thief::thief()",
@@ -65,7 +65,7 @@
 #' The engine uses `thief::thief()`.
 #'
 #' Function Parameters:
-#' ```{r echo = FALSE}
+#' ```{r echo = FALSE, eval = rlang::is_installed("thief")}
 #' str(thief::thief)
 #' ```
 #' Other options and argument can be set using `set_engine()`.
@@ -96,14 +96,13 @@
 #' This model is not set up for use with exogenous regressors.
 #'
 #'
-#' @seealso [fit.model_spec()], [set_engine()]
+#' @seealso `fit.model_spec()`, `set_engine()`
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("thief")
 #' library(dplyr)
 #' library(parsnip)
 #' library(rsample)
 #' library(timetk)
-#' library(modeltime)
 #' library(thief)
 #'
 #' # Data
@@ -169,7 +168,7 @@ update.temporal_hierarchy <- function(object, parameters = NULL,
                                       combination_method = NULL, use_model = NULL,
                                       fresh = FALSE, ...) {
 
-    parsnip::update_dot_check(...)
+    eng_args <- parsnip::update_engine_parameters(object$eng_args, fresh, ...)
 
     if (!is.null(parameters)) {
         parameters <- parsnip::check_final_param(parameters)
@@ -185,12 +184,15 @@ update.temporal_hierarchy <- function(object, parameters = NULL,
 
     if (fresh) {
         object$args <- args
+        object$eng_args <- eng_args
     } else {
         null_args <- purrr::map_lgl(args, parsnip::null_value)
         if (any(null_args))
             args <- args[!null_args]
         if (length(args) > 0)
             object$args[names(args)] <- args
+        if (length(eng_args) > 0)
+            object$eng_args[names(eng_args)] <- eng_args
     }
 
     parsnip::new_model_spec(
@@ -229,6 +231,7 @@ translate.temporal_hierarchy <- function(x, engine = x$engine, ...) {
 #' @param usemodel Model used for forecasting each aggregation level
 #' @param ... Additional arguments passed to `forecast::ets`
 #'
+#' @keywords internal
 #' @export
 temporal_hier_fit_impl <- function(x, y,
                                    period = "auto",
@@ -340,6 +343,7 @@ predict.temporal_hier_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `stats::predict()`
 #'
+#' @keywords internal
 #' @export
 temporal_hier_predict_impl <- function(object, new_data, ...) {
     # PREPARE INPUTS

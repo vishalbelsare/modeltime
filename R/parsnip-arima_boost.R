@@ -193,16 +193,15 @@
 #'
 #'
 #'
-#' @seealso [fit.model_spec()], [set_engine()]
+#' @seealso `fit.model_spec()`, `set_engine()`
 #'
 #' @examples
-#' library(tidyverse)
+#' \donttest{
+#' library(dplyr)
 #' library(lubridate)
 #' library(parsnip)
 #' library(rsample)
 #' library(timetk)
-#' library(modeltime)
-#'
 #'
 #' # Data
 #' m750 <- m4_monthly %>% filter(id == "M750")
@@ -232,12 +231,10 @@
 #'
 #' # FIT ----
 #'
-#' \dontrun{
 #' # Boosting - Happens by adding numeric date and month features
 #' model_fit_boosted <- model_spec %>%
 #'     fit(value ~ date + as.numeric(date) + month(date, label = TRUE),
 #'         data = training(splits))
-#'
 #' model_fit_boosted
 #' }
 #'
@@ -310,7 +307,7 @@ update.arima_boost <- function(object,
                                sample_size = NULL, stop_iter = NULL,
                                fresh = FALSE, ...) {
 
-    parsnip::update_dot_check(...)
+    eng_args <- parsnip::update_engine_parameters(object$eng_args, fresh, ...)
 
     if (!is.null(parameters)) {
         parameters <- parsnip::check_final_param(parameters)
@@ -342,12 +339,15 @@ update.arima_boost <- function(object,
 
     if (fresh) {
         object$args <- args
+        object$eng_args <- eng_args
     } else {
         null_args <- purrr::map_lgl(args, parsnip::null_value)
         if (any(null_args))
             args <- args[!null_args]
         if (length(args) > 0)
             object$args[names(args)] <- args
+        if (length(eng_args) > 0)
+            object$eng_args[names(eng_args)] <- eng_args
     }
 
     parsnip::new_model_spec(
@@ -412,6 +412,7 @@ translate.arima_boost <- function(x, engine = x$engine, ...) {
 #' @param ... Additional arguments passed to `xgboost::xgb.train`
 #'
 #'
+#' @keywords internal
 #' @export
 #' @importFrom stats frequency
 auto_arima_xgboost_fit_impl <- function(x, y, period = "auto",
@@ -610,7 +611,7 @@ print.auto_arima_xgboost_fit_impl <- function(x, ...) {
 #' is used.
 #' @param ... Additional arguments passed to `xgboost::xgb.train`
 #'
-#'
+#' @keywords internal
 #' @export
 #' @importFrom stats frequency
 arima_xgboost_fit_impl <- function(x, y, period = "auto",
@@ -769,6 +770,7 @@ predict.arima_xgboost_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `predict.xgb.Booster()`
 #'
+#' @keywords internal
 #' @export
 arima_xgboost_predict_impl <- function(object, new_data, ...) {
 

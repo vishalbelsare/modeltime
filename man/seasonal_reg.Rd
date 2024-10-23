@@ -66,11 +66,13 @@ Other options can be set using \code{set_engine()}.
 
 The engines use \code{forecast::stlm()}.
 
-Function Parameters:\preformatted{## function (y, s.window = 7 + 4 * seq(6), robust = FALSE, method = c("ets", 
-##     "arima"), modelfunction = NULL, model = NULL, etsmodel = "ZZN", lambda = NULL, 
-##     biasadj = FALSE, xreg = NULL, allow.multiplicative.trend = FALSE, x = y, 
-##     ...)
-}
+Function Parameters:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{#> function (y, s.window = 7 + 4 * seq(6), robust = FALSE, method = c("ets", 
+#>     "arima"), modelfunction = NULL, model = NULL, etsmodel = "ZZN", lambda = NULL, 
+#>     biasadj = FALSE, xreg = NULL, allow.multiplicative.trend = FALSE, x = y, 
+#>     ...)
+}\if{html}{\out{</div>}}
 
 \strong{tbats}
 \itemize{
@@ -158,7 +160,6 @@ library(dplyr)
 library(parsnip)
 library(rsample)
 library(timetk)
-library(modeltime)
 
 # Data
 taylor_30_min
@@ -191,5 +192,5 @@ model_fit
 
 }
 \seealso{
-\code{\link[=fit.model_spec]{fit.model_spec()}}, \code{\link[=set_engine]{set_engine()}}
+\code{fit.model_spec()}, \code{set_engine()}
 }

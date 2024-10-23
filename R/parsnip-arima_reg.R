@@ -162,14 +162,13 @@
 #'
 #'
 #'
-#' @seealso [fit.model_spec()], [set_engine()]
+#' @seealso `fit.model_spec()`, `set_engine()`
 #'
 #' @examples
 #' library(dplyr)
 #' library(parsnip)
 #' library(rsample)
 #' library(timetk)
-#' library(modeltime)
 #'
 #' # Data
 #' m750 <- m4_monthly %>% filter(id == "M750")
@@ -255,7 +254,7 @@ update.arima_reg <- function(object, parameters = NULL,
                              seasonal_ar = NULL, seasonal_differences = NULL, seasonal_ma = NULL,
                              fresh = FALSE, ...) {
 
-    parsnip::update_dot_check(...)
+    eng_args <- parsnip::update_engine_parameters(object$eng_args, fresh, ...)
 
     if (!is.null(parameters)) {
         parameters <- parsnip::check_final_param(parameters)
@@ -275,12 +274,15 @@ update.arima_reg <- function(object, parameters = NULL,
 
     if (fresh) {
         object$args <- args
+        object$eng_args <- eng_args
     } else {
         null_args <- purrr::map_lgl(args, parsnip::null_value)
         if (any(null_args))
             args <- args[!null_args]
         if (length(args) > 0)
             object$args[names(args)] <- args
+        if (length(eng_args) > 0)
+            object$eng_args[names(eng_args)] <- eng_args
     }
 
     parsnip::new_model_spec(
@@ -323,6 +325,7 @@ translate.arima_reg <- function(x, engine = x$engine, ...) {
 #' @param Q The order of the seasonal moving average (SMA) terms. Often denoted "Q" in PDQ-notation.
 #' @param ... Additional arguments passed to `forecast::Arima`
 #'
+#' @keywords internal
 #' @export
 Arima_fit_impl <- function(x, y, period = "auto",
                            p = 0, d = 0, q = 0, P = 0, D = 0, Q = 0,
@@ -406,6 +409,7 @@ print.Arima_fit_impl <- function(x, ...) {
 #' @param max.Q The maximum order of the seasonal moving average (SMA) terms.
 #' @param ... Additional arguments passed to `forecast::auto.arima`
 #'
+#' @keywords internal
 #' @export
 auto_arima_fit_impl <- function(x, y, period = "auto",
                                 max.p = 5, max.d = 2, max.q = 5,
@@ -498,6 +502,7 @@ predict.Arima_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `forecast::Arima()`
 #'
+#' @keywords internal
 #' @export
 Arima_predict_impl <- function(object, new_data, ...) {
 

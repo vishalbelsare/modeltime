@@ -3,31 +3,36 @@ context("TEST FORECASTING WITH NO CALIBRATION")
 
 # SIMPLE PREDICTION ----
 
-# library(modeltime)
 # library(tidymodels)
-# library(tidyverse)
+# library(dplyr)
 # library(timetk)
 # library(lubridate)
 
-# SETUP ----
-m750 <- m4_monthly %>%
-    filter(id == "M750")
-
-model_fit_arima <- arima_reg() %>%
-    set_engine("auto_arima") %>%
-    fit(value ~ date, m750)
-
-model_fit_lm <- linear_reg() %>%
-    set_engine("lm") %>%
-    fit(value ~ splines::ns(date, df = 5) + month(date, label = TRUE), m750)
-
-model_fit_prophet <- prophet_reg() %>%
-    set_engine("prophet") %>%
-    fit(value ~ date, m750)
 
 # TESTS ----
 
-test_that("Non-Calibration 1: h = 3 years, actual_data = m750", {
+test_that("No Calibration", {
+
+    skip_on_cran()
+
+    # SETUP ----
+    m750 <- timetk::m4_monthly %>%
+        dplyr::filter(id == "M750")
+
+    model_fit_arima <- arima_reg() %>%
+        parsnip::set_engine("auto_arima") %>%
+        fit(value ~ date, m750)
+
+    model_fit_lm <- linear_reg() %>%
+        parsnip::set_engine("lm") %>%
+        fit(value ~ splines::ns(date, df = 5) + lubridate::month(date, label = TRUE), m750)
+
+    model_fit_prophet <- prophet_reg() %>%
+        parsnip::set_engine("prophet") %>%
+        fit(value ~ date, m750)
+
+    # Non-Calibration 1: h = 3 years, actual_data = m750 ----
+
     fcast <- modeltime_table(
         model_fit_arima,
         model_fit_lm,
@@ -42,10 +47,8 @@ test_that("Non-Calibration 1: h = 3 years, actual_data = m750", {
     expect_equal(ncol(fcast), 5)
 
     # fcast %>% plot_modeltime_forecast(.conf_interval_show = F)
-})
 
-
-test_that("Non-Calibration 2: New Data = Actual Data", {
+    # Non-Calibration 2: New Data = Actual Data ----
 
     fcast <- modeltime_table(
         model_fit_prophet,
@@ -60,9 +63,8 @@ test_that("Non-Calibration 2: New Data = Actual Data", {
     expect_equal(ncol(fcast), 5)
 
     # fcast %>% plot_modeltime_forecast(.conf_interval_show = F)
-})
 
-test_that("Non-Calibration 3: Actual Data Provided, New Data Missing", {
+    # Non-Calibration 3: Actual Data Provided, New Data Missing ----
 
     expect_message({
         modeltime_table(
@@ -74,9 +76,8 @@ test_that("Non-Calibration 3: Actual Data Provided, New Data Missing", {
             )
     })
 
-})
 
-test_that("Non-Calibration 4: New Data Only", {
+    # Non-Calibration 4: New Data Only ----
 
     fcast <- modeltime_table(
         model_fit_prophet,
@@ -91,13 +92,8 @@ test_that("Non-Calibration 4: New Data Only", {
 
     # fcast %>% plot_modeltime_forecast(.conf_interval_show = F)
 
-})
 
-
-
-# ERROR HANDLING ----
-
-test_that("Non-Calibration 5: Errors", {
+    # Non-Calibration 5: Errors ----
 
     # Error - Nothing provided - Needs new_data or h
     expect_error({

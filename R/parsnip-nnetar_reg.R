@@ -126,14 +126,13 @@
 #'
 #'
 #'
-#' @seealso [fit.model_spec()], [set_engine()]
+#' @seealso `fit.model_spec()`, `set_engine()`
 #'
 #' @examples
 #' library(dplyr)
 #' library(parsnip)
 #' library(rsample)
 #' library(timetk)
-#' library(modeltime)
 #'
 #' # Data
 #' m750 <- m4_monthly %>% filter(id == "M750")
@@ -205,7 +204,7 @@ update.nnetar_reg <- function(object, parameters = NULL,
                              penalty = NULL, epochs = NULL,
                              fresh = FALSE, ...) {
 
-    parsnip::update_dot_check(...)
+    eng_args <- parsnip::update_engine_parameters(object$eng_args, fresh, ...)
 
     if (!is.null(parameters)) {
         parameters <- parsnip::check_final_param(parameters)
@@ -225,12 +224,15 @@ update.nnetar_reg <- function(object, parameters = NULL,
 
     if (fresh) {
         object$args <- args
+        object$eng_args <- eng_args
     } else {
         null_args <- purrr::map_lgl(args, parsnip::null_value)
         if (any(null_args))
             args <- args[!null_args]
         if (length(args) > 0)
             object$args[names(args)] <- args
+        if (length(eng_args) > 0)
+            object$eng_args[names(eng_args)] <- eng_args
     }
 
     parsnip::new_model_spec(
@@ -270,6 +272,7 @@ translate.nnetar_reg <- function(x, engine = x$engine, ...) {
 #' @param maxit Maximum number of iterations. Default 100.
 #' @param ... Additional arguments passed to `forecast::nnetar`
 #'
+#' @keywords internal
 #' @export
 nnetar_fit_impl <- function(x, y, period = "auto",
                             p = 1, P = 1, size = 10, repeats = 20,
@@ -350,6 +353,7 @@ predict.nnetar_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `forecast::forecast()`
 #'
+#' @keywords internal
 #' @export
 nnetar_predict_impl <- function(object, new_data, ...) {
 

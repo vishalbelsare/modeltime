@@ -35,7 +35,7 @@
 #' provided, starting with the letter "d" - "density".
 #' @param loss The type of Loss Function used in optimization.
 #' @param information_criteria The information criterion to use in the model selection / combination procedure.
-#' @param select_order If TRUE, then the function will select the most appropriate order. The values list(ar=...,i=...,ma=...)
+#' @param select_order If `TRUE`, then the function will select the most appropriate order. The values list(ar=...,i=...,ma=...)
 #' specify the maximum orders to check in this case.
 #'
 #'
@@ -86,7 +86,7 @@
 #' The engine uses [smooth::auto.adam()].
 #'
 #' Function Parameters:
-#' ```{r echo = FALSE}
+#' ```{r echo = FALSE, eval = rlang::is_installed("smooth")}
 #' str(smooth::auto.adam)
 #' ```
 #' The _MAXIMUM_ nonseasonal ARIMA terms (`max.p`, `max.d`, `max.q`) and
@@ -105,7 +105,7 @@
 #' The engine uses [smooth::adam()].
 #'
 #' Function Parameters:
-#' ```{r echo = FALSE}
+#' ```{r echo = FALSE, eval = rlang::is_installed("smooth")}
 #' str(smooth::adam)
 #' ```
 #'
@@ -165,15 +165,15 @@
 #'
 #'  Note that date or date-time class values are excluded from `xreg`.
 #'
-#' @seealso [fit.model_spec()], [set_engine()]
+#' @seealso `fit.model_spec()`, `set_engine()`
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf rlang::is_installed("smooth")
+#'
+#' \donttest{
 #' library(dplyr)
 #' library(parsnip)
 #' library(rsample)
 #' library(timetk)
-#' library(modeltime)
 #' library(smooth)
 #'
 #' # Data
@@ -278,7 +278,7 @@ update.adam_reg <- function(object, parameters = NULL,
                              seasonal_period = NULL, select_order = NULL,
                              fresh = FALSE, ...) {
 
-    parsnip::update_dot_check(...)
+    eng_args <- parsnip::update_engine_parameters(object$eng_args, fresh, ...)
 
     if (!is.null(parameters)) {
         parameters <- parsnip::check_final_param(parameters)
@@ -308,12 +308,15 @@ update.adam_reg <- function(object, parameters = NULL,
 
     if (fresh) {
         object$args <- args
+        object$eng_args <- eng_args
     } else {
         null_args <- purrr::map_lgl(args, parsnip::null_value)
         if (any(null_args))
             args <- args[!null_args]
         if (length(args) > 0)
             object$args[names(args)] <- args
+        if (length(eng_args) > 0)
+            object$eng_args[names(eng_args)] <- eng_args
     }
 
     parsnip::new_model_spec(
@@ -368,9 +371,11 @@ translate.adam_reg <- function(x, engine = x$engine, ...) {
 #' specify the maximum orders to check in this case
 #' @param ... Additional arguments passed to `smooth::adam`
 #'
+#' @keywords internal
 #' @export
 adam_fit_impl <- function(x, y, period = "auto", p = 0, d = 0, q = 0, P = 0, D = 0, Q = 0,
-                          model = "ZXZ", constant = FALSE, regressors =  c("use", "select", "adapt"),
+                          model = "ZXZ", constant = FALSE,
+                          regressors =  c("use", "select", "adapt"),
                           outliers = c("ignore", "use", "select"), level = 0.99,
                           occurrence = c("none", "auto", "fixed", "general", "odds-ratio",
                                          "inverse-odds-ratio", "direct"),
@@ -404,11 +409,11 @@ adam_fit_impl <- function(x, y, period = "auto", p = 0, d = 0, q = 0, P = 0, D =
     }
 
     if (!any(names(args) == "regressors")){
-        args[["regressors"]] <- regressors
+        args[["regressors"]] <- regressors[1]
     }
 
     if (!any(names(args) == "outliers")){
-        args[["outliers"]] <- outliers
+        args[["outliers"]] <- outliers[1]
     }
 
     if (!any(names(args) == "level")){
@@ -416,19 +421,19 @@ adam_fit_impl <- function(x, y, period = "auto", p = 0, d = 0, q = 0, P = 0, D =
     }
 
     if (!any(names(args) == "occurrence")){
-        args[["occurrence"]] <- occurrence
+        args[["occurrence"]] <- occurrence[1]
     }
 
     if (!any(names(args) == "distribution")){
-        args[["distribution"]] <- distribution
+        args[["distribution"]] <- distribution[1]
     }
 
     if (!any(names(args) == "loss")){
-        args[["loss"]] <- loss
+        args[["loss"]] <- loss[1]
     }
 
     if (!any(names(args) == "ic")){
-        args[["ic"]] <- ic
+        args[["ic"]] <- ic[1]
     }
 
 
@@ -451,8 +456,6 @@ adam_fit_impl <- function(x, y, period = "auto", p = 0, d = 0, q = 0, P = 0, D =
         xreg_tbl
     ) %>%
         as.data.frame()
-
-
 
     fit_call <- parsnip::make_call(fun  = "adam",
                                    ns   = "smooth",
@@ -508,6 +511,7 @@ predict.Adam_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `smooth::adam()`
 #'
+#' @keywords internal
 #' @export
 Adam_predict_impl <- function(object, new_data, ...) {
 
@@ -565,19 +569,24 @@ Adam_predict_impl <- function(object, new_data, ...) {
 #' specify the maximum orders to check in this case.
 #' @param ... Additional arguments passed to `smooth::auto.adam`
 #'
+#' @keywords internal
 #' @export
-auto_adam_fit_impl <- function(x, y, period = "auto", p = 0, d = 0, q = 0, P = 0, D = 0, Q = 0,
-                          model = "ZXZ", constant = FALSE, regressors =  c("use", "select", "adapt"),
-                          outliers = c("ignore", "use", "select"), level = 0.99,
-                          occurrence = c("none", "auto", "fixed", "general", "odds-ratio",
-                                         "inverse-odds-ratio", "direct"),
-                          distribution = c("default", "dnorm", "dlaplace", "ds", "dgnorm",
-                                           "dlnorm", "dinvgauss", "dgamma"),
-                          loss = c("likelihood", "MSE", "MAE", "HAM", "LASSO", "RIDGE", "MSEh",
-                                   "TMSE", "GTMSE", "MSCE"),
-                          ic   = c("AICc", "AIC", "BIC", "BICc"),
-                          select_order = FALSE,
-                          ...) {
+auto_adam_fit_impl <- function(
+      x, y, period = "auto",
+      p = 0, d = 0, q = 0, P = 0, D = 0, Q = 0,
+      model = "ZXZ",
+      constant = FALSE,
+      regressors =  c("use", "select", "adapt"),
+      outliers = c("ignore", "use", "select"), level = 0.99,
+      occurrence = c("none", "auto", "fixed", "general", "odds-ratio",
+                     "inverse-odds-ratio", "direct"),
+      distribution = c("default", "dnorm", "dlaplace", "ds", "dgnorm",
+                       "dlnorm", "dinvgauss", "dgamma"),
+      loss = c("likelihood", "MSE", "MAE", "HAM", "LASSO", "RIDGE", "MSEh",
+               "TMSE", "GTMSE", "MSCE"),
+      ic   = c("AICc", "AIC", "BIC", "BICc"),
+      select_order = FALSE,
+      ...) {
 
 
     # X & Y
@@ -601,11 +610,11 @@ auto_adam_fit_impl <- function(x, y, period = "auto", p = 0, d = 0, q = 0, P = 0
     }
 
     if (!any(names(args) == "regressors")){
-        args[["regressors"]] <- regressors
+        args[["regressors"]] <- regressors[1]
     }
 
     if (!any(names(args) == "outliers")){
-        args[["outliers"]] <- outliers
+        args[["outliers"]] <- outliers[1]
     }
 
     if (!any(names(args) == "level")){
@@ -613,19 +622,19 @@ auto_adam_fit_impl <- function(x, y, period = "auto", p = 0, d = 0, q = 0, P = 0
     }
 
     if (!any(names(args) == "occurrence")){
-        args[["occurrence"]] <- occurrence
+        args[["occurrence"]] <- occurrence[1]
     }
 
     if (!any(names(args) == "distribution")){
-        args[["distribution"]] <- distribution
+        args[["distribution"]] <- distribution[1]
     }
 
     if (!any(names(args) == "loss")){
-        args[["loss"]] <- loss
+        args[["loss"]] <- loss[1]
     }
 
     if (!any(names(args) == "ic")){
-        args[["ic"]] <- ic
+        args[["ic"]] <- ic[1]
     }
 
 
@@ -700,6 +709,7 @@ predict.Auto_adam_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `smooth::auto.adam()`
 #'
+#' @keywords internal
 #' @export
 Auto_adam_predict_impl <- function(object, new_data, ...) {
 

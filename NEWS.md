@@ -1,6 +1,110 @@
-# modeltime 1.1.0.9000
+# modeltime 1.3.1.9000 (Development Version)
+
+# modeltime 1.3.1
+
+Parallel Computation:
+- `parallel_start()`: New parameters `.export_vars` and `.packages` allows passing environment variables and packages to the parallel workers. 
+
+Fixes:
+- Adam (`adam_reg()`): Fixes #254 
+- Adam: Add new dials parameters: `ets_model` and `loss`
+
+# modeltime 1.3.0
+
+#### Overview
+
+This version and modeltime 1.2.8 (previous version) include changes to incorporate Conformal Prediction Intervals. There are a number of changes that include new "conformal" confidence methods and Tibble (Data Frame) table display improvements of forecasts aimed at helping the user understand what confidence method is being used and the confidence interval being used throughout the forecasting process in both Standard and Nested Modeltime Forecasting Workflows. 
+
+#### Conformal Predictions:
+
+- Integrate Conformal Predictions into Nested Forecast Workflow: `modeltime_nested_fit()` and `modeltime_nested_refit()`. #173
+- Updated the `print` display for conformal prediction Conf Method, Conf Interval:
+   - `modeltime_forecast()`
+   - `extract_nested_test_forecast()`
+   - `extract_nested_future_forecast()`
+   - `modeltime_nested_forecast()`
+
+#### Other Changes:
+
+- Dials Parameters: Remove deprecated `default` inside `new_qual_param()`.
+- Fix warning in dev-xregs: Use `all_of()` inside `prepare_xreg_recipe_from_predictors()`
+- Fix broken test: `test-tune_workflows` Unused argument: `cores = 2`
+
+# modeltime 1.2.8
+
+- Integrate Conformal Predictions into Standard Modeltime Forecast Workflow: `modeltime_forecast()` #173
+- New Vignette: Conformal Forecast Prediction Intervals in Modeltime
 
 
+#### Other Changes:
+
+- Reduced test times on CRAN
+- CRAN Vignettes & Tests: Enforce no parallel cores `Sys.setenv("OMP_THREAD_LIMIT" = 1)`
+- Change the default parallel processing to one (1) core from all available cores (-1):
+    - `control_refit()`
+    - `control_fit_workflowset()`
+    - `control_nested_fit()`
+    - `control_nested_refit()`
+    - `control_nested_forecast()`
+
+# modeltime 1.2.7
+
+- Fixes for R4.3+ which returns `lm` models as `pred_res`. #228
+
+# modeltim 1.2.6
+
+- Fixes to get `modeltime` back on CRAN following inadvertent `timetk` archival. 
+
+# modeltime 1.2.5
+
+- Fixes for Smooth `es()` model #221
+
+# modeltime 1.2.4
+
+- Fix failing tests in test-developer-tools-xregs.R
+
+# modeltime 1.2.3
+
+- Recursive `chunk_size` (performance improvement) #197 #190
+- Recursive model fixes #194, #188, #187, #174
+- New function, `drop_modeltime_model` #160
+- Updates for `workflows` mode = "regression"
+
+# modeltime 1.2.2
+
+### Fixes
+
+- Updates for `hardhat 1.0.0` #182
+
+# modeltime 1.2.1
+
+### Trelliscope Plotting
+
+- `plot_modeltime_forecast()`: Expose the `facet_trelliscope()` plotting parameters. 
+
+### Fixes
+
+- Use `step_rm()` to get rid of date rather than updating its role #181
+
+# modeltime 1.2.0 
+
+__New Features__
+
+Many of the plotting functions have been upgraded for use with `trelliscopejs` for 
+easier visualization of many time series. 
+
+- `plot_modeltime_forecast()`: 
+    - Gets a new argument `trelliscope`: Used for visualizing many time series.
+    - Gets a new argument `.facet_strip_remove` to remove facet strips since trelliscope is automatically labeled.
+    - Gets a new argument `.facet_nrow` to adjust grid with trelliscope.
+    - The default argument for `facet_collapse = TRUE` was changed to `FALSE` for better compatibility with Trelliscope JS. This may cause some plots to have multiple groups take up extra space in the strip.
+
+
+# modeltime 1.1.1
+
+## Fixes
+
+- Fixes issue of incorrect order of forecasts #142
 
 # modeltime 1.1.0 
 

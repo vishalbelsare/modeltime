@@ -46,7 +46,7 @@ See Fit Details below.}
 
 \item{mtry}{A number for the number (or proportion) of predictors that will
 be randomly sampled at each split when creating the tree models
-(specific engines only)}
+(specific engines only).}
 
 \item{trees}{An integer for the number of trees contained in
 the ensemble.}
@@ -58,7 +58,8 @@ in a node that is required for the node to be split further.}
 of splits) (specific engines only).}
 
 \item{learn_rate}{A number for the rate at which the boosting algorithm adapts
-from iteration-to-iteration (specific engines only).}
+from iteration-to-iteration (specific engines only). This is sometimes referred to
+as the shrinkage parameter.}
 
 \item{loss_reduction}{A number for the reduction in the loss function required
 to split further (specific engines only).}
@@ -163,16 +164,18 @@ Other options can be set using \code{set_engine()}.
 
 \strong{auto_arima_xgboost (default engine)}
 
-Model 1: Auto ARIMA (\code{forecast::auto.arima}):\preformatted{## function (y, d = NA, D = NA, max.p = 5, max.q = 5, max.P = 2, max.Q = 2, 
-##     max.order = 5, max.d = 2, max.D = 1, start.p = 2, start.q = 2, start.P = 1, 
-##     start.Q = 1, stationary = FALSE, seasonal = TRUE, ic = c("aicc", "aic", 
-##         "bic"), stepwise = TRUE, nmodels = 94, trace = FALSE, approximation = (length(x) > 
-##         150 | frequency(x) > 12), method = NULL, truncate = NULL, xreg = NULL, 
-##     test = c("kpss", "adf", "pp"), test.args = list(), seasonal.test = c("seas", 
-##         "ocsb", "hegy", "ch"), seasonal.test.args = list(), allowdrift = TRUE, 
-##     allowmean = TRUE, lambda = NULL, biasadj = FALSE, parallel = FALSE, 
-##     num.cores = 2, x = y, ...)
-}
+Model 1: Auto ARIMA (\code{forecast::auto.arima}):
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{#> function (y, d = NA, D = NA, max.p = 5, max.q = 5, max.P = 2, max.Q = 2, 
+#>     max.order = 5, max.d = 2, max.D = 1, start.p = 2, start.q = 2, start.P = 1, 
+#>     start.Q = 1, stationary = FALSE, seasonal = TRUE, ic = c("aicc", "aic", 
+#>         "bic"), stepwise = TRUE, nmodels = 94, trace = FALSE, approximation = (length(x) > 
+#>         150 | frequency(x) > 12), method = NULL, truncate = NULL, xreg = NULL, 
+#>     test = c("kpss", "adf", "pp"), test.args = list(), seasonal.test = c("seas", 
+#>         "ocsb", "hegy", "ch"), seasonal.test.args = list(), allowdrift = TRUE, 
+#>     allowmean = TRUE, lambda = NULL, biasadj = FALSE, parallel = FALSE, 
+#>     num.cores = 2, x = y, ...)
+}\if{html}{\out{</div>}}
 
 Parameter Notes:
 \itemize{
@@ -181,11 +184,13 @@ The \code{auto.arima} will select a value using these as an upper limit.
 \item \code{xreg} - This should not be used since XGBoost will be doing the regression
 }
 
-Model 2: XGBoost (\code{xgboost::xgb.train}):\preformatted{## function (params = list(), data, nrounds, watchlist = list(), obj = NULL, 
-##     feval = NULL, verbose = 1, print_every_n = 1L, early_stopping_rounds = NULL, 
-##     maximize = NULL, save_period = NULL, save_name = "xgboost.model", xgb_model = NULL, 
-##     callbacks = list(), ...)
-}
+Model 2: XGBoost (\code{xgboost::xgb.train}):
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{#> function (params = list(), data, nrounds, watchlist = list(), obj = NULL, 
+#>     feval = NULL, verbose = 1, print_every_n = 1L, early_stopping_rounds = NULL, 
+#>     maximize = NULL, save_period = NULL, save_name = "xgboost.model", xgb_model = NULL, 
+#>     callbacks = list(), ...)
+}\if{html}{\out{</div>}}
 
 Parameter Notes:
 \itemize{
@@ -252,13 +257,12 @@ Note that date or date-time class values are excluded from \code{xreg}.
 }
 
 \examples{
-library(tidyverse)
+\donttest{
+library(dplyr)
 library(lubridate)
 library(parsnip)
 library(rsample)
 library(timetk)
-library(modeltime)
-
 
 # Data
 m750 <- m4_monthly \%>\% filter(id == "M750")
@@ -288,17 +292,15 @@ model_spec <- arima_boost(
 
 # FIT ----
 
-\dontrun{
 # Boosting - Happens by adding numeric date and month features
 model_fit_boosted <- model_spec \%>\%
     fit(value ~ date + as.numeric(date) + month(date, label = TRUE),
         data = training(splits))
-
 model_fit_boosted
 }
 
 
 }
 \seealso{
-\code{\link[=fit.model_spec]{fit.model_spec()}}, \code{\link[=set_engine]{set_engine()}}
+\code{fit.model_spec()}, \code{set_engine()}
 }

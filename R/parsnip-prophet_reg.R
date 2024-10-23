@@ -175,14 +175,13 @@
 #'
 #'
 #'
-#' @seealso [fit.model_spec()], [set_engine()]
+#' @seealso `fit.model_spec()`, `set_engine()`
 #'
 #' @examples
 #' library(dplyr)
 #' library(parsnip)
 #' library(rsample)
 #' library(timetk)
-#' library(modeltime)
 #'
 #' # Data
 #' m750 <- m4_monthly %>% filter(id == "M750")
@@ -260,7 +259,7 @@ update.prophet_reg <- function(object, parameters = NULL,
                                logistic_cap = NULL, logistic_floor = NULL,
                                fresh = FALSE, ...) {
 
-    parsnip::update_dot_check(...)
+    eng_args <- parsnip::update_engine_parameters(object$eng_args, fresh, ...)
 
     if (!is.null(parameters)) {
         parameters <- parsnip::check_final_param(parameters)
@@ -286,12 +285,15 @@ update.prophet_reg <- function(object, parameters = NULL,
 
     if (fresh) {
         object$args <- args
+        object$eng_args <- eng_args
     } else {
         null_args <- purrr::map_lgl(args, parsnip::null_value)
         if (any(null_args))
             args <- args[!null_args]
         if (length(args) > 0)
             object$args[names(args)] <- args
+        if (length(eng_args) > 0)
+            object$eng_args[names(eng_args)] <- eng_args
     }
 
     parsnip::new_model_spec(
@@ -337,6 +339,7 @@ translate.prophet_reg <- function(x, engine = x$engine, ...) {
 #'  Defaults to `seasonality.mode`.
 #' @param ... Additional arguments passed to `prophet::prophet`
 #'
+#' @keywords internal
 #' @export
 prophet_fit_impl <- function(x, y,
                              growth = "linear",
@@ -376,7 +379,7 @@ prophet_fit_impl <- function(x, y,
 
     if (growth == "logistic") {
         if (all(c(is.null(logistic_cap), is.null(logistic_floor)))) {
-            glubort("Capacities must be supplied for `growth = 'logistic'`. Try specifying at least one of 'logistic_cap' or 'logistic_floor'")
+            cli::cli_abort("Capacities must be supplied for `growth = 'logistic'`. Try specifying at least one of 'logistic_cap' or 'logistic_floor'")
         }
     }
 
@@ -537,6 +540,7 @@ predict.prophet_fit_impl <- function(object, new_data, ...) {
 #' @inheritParams parsnip::predict.model_fit
 #' @param ... Additional arguments passed to `prophet::predict()`
 #'
+#' @keywords internal
 #' @export
 prophet_predict_impl <- function(object, new_data, ...) {
 

@@ -7,7 +7,7 @@
 Auto_adam_predict_impl(object, new_data, ...)
 }
 \arguments{
-\item{object}{An object of class \code{model_fit}}
+\item{object}{An object of class \code{model_fit}.}
 
 \item{new_data}{A rectangular data object, such as a data frame.}
 
@@ -16,3 +16,4 @@ Auto_adam_predict_impl(object, new_data, ...)
 \description{
 Bridge prediction function for AUTO ADAM models
 }
+\keyword{internal}
